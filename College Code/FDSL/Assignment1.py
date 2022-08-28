@@ -1,73 +1,122 @@
-print("Hello World")
-def enter_students(n, lst):
-        for i in range(n):
-                rollno = int(input("Enter roll no.:"))
-                        lst.append(rollno)
+
+# for getting roll number in a list
+def get_student_list(game):
+    lst = []
+    n = int(input(f"Enter Number of Students Playing {game} :"))
+    for i in range(n):
+        roll_no = int(input(f"Enter roll no.({i+1}):"))
+        lst.append(roll_no)
+    print(f"{game} players are : ", lst)
+    return lst
 
 
-                        def union(x, y):
-                            unilst = x + y
-                                for i in x:
-                                        if i in y:
-                                                    unilst.remove(i)
-                                                        return unilst
+# function for union of two lists
+def union(x, y):
+    unionist = x + y
+    for i in x:
+        if i in y:
+            unionist.remove(i)
+    return unionist
 
 
-                                                        def intersetion(x, y):
-                                                            interlst = []
-                                                                for i in x:
-                                                                        if i in y:
-                                                                                    interlst.append(i)
-                                                                                        return interlst
+# function for intersection of two lists
+def intersection(x, y):
+    inter_list = []
+    for i in x:
+        if i in y:
+            inter_list.append(i)
+    return inter_list
 
 
-                                                                                        def either_sport(x, y):
-                                                                                            eitherlst = x + y
-                                                                                                for i in x:
-                                                                                                        if i in y:
-                                                                                                                    eitherlst.remove(i)
-                                                                                                                                eitherlst.remove(i)
-                                                                                                                                    return eitherlst
+# function for list a - list b
+def list_difference(list_a, list_b):
+    result = []
+    for i in list_a:
+        if i not in list_b:
+            result.append(i)
+    return result
 
 
-                                                                                                                                    def count_neither(x, y):
-                                                                                                                                        uni = union(x, y)
-                                                                                                                                            return len(studentlst) - len(uni)
+# display lists of all players
+def display_lists():
+    print("Cricket :", group_a)
+    print("Badminton :", group_b)
+    print("Football :", group_c)
 
 
-                                                                                                                                            def count_play2_but_not1(x, y, z):
-                                                                                                                                                uni = union(x, y)
-                                                                                                                                                    count = len(uni) - len(intersetion(uni, z))
-                                                                                                                                                        return count
+# Declaration variables and lists 
+total_students = int(input("Enter Total Number of Students :"))
+group_a = get_student_list("Cricket")
+group_b = get_student_list("Badminton")
+group_c = get_student_list("Football")
+exit_choice = True
 
+# while loop for user menu
+while True:
+    print("--MENU--")
+    print("1.Display Players lists")
+    print("2.List of Student playing both cricket and badminton")
+    print("3.List of Student playing both either cricket or badminton but not both")
+    print("4.Number of students who play neither cricket nor badminton")
+    print("5.Number of students who play cricket and football but not badminton")
+    choice = input("Enter your choice :")
 
-                                                                                                                                                        def show_play2_but_not1(x, y, z):
-                                                                                                                                                            uni = union(x, y)
-                                                                                                                                                                inter = (intersetion(uni, z))
-                                                                                                                                                                    for i in inter:
-                                                                                                                                                                            if i in uni:
-                                                                                                                                                                                        uni.remove(i)
-                                                                                                                                                                                            return uni
+    if choice == '1':
+        display_lists()
 
+    elif choice == '2':
+        both_a_and_b = intersection(group_a, group_b)
+        print("List of Student playing both cricket and badminton is ", both_a_and_b)
 
-                                                                                                                                                                                            studentlst = [int(x) for x in range(1, int(input("Enter total number of students:")))]
+    elif choice == '3':
+        a_and_b_not_both = list_difference(
+            union(group_a, group_b), intersection(group_a, group_b))
+        print("List of Student playing both either cricket or badminton but not both", a_and_b_not_both)
 
-                                                                                                                                                                                            cricket = []
-                                                                                                                                                                                            badminton = []
-                                                                                                                                                                                            football = []
-                                                                                                                                                                                            no_c = int(input("Enter number of students in Cricket:"))
-                                                                                                                                                                                            enter_students(no_c, cricket)
-                                                                                                                                                                                            no_b = int(input("Enter number of students in Badminton:"))
-                                                                                                                                                                                            enter_students(no_b, badminton)
-                                                                                                                                                                                            no_f = int(input("Enter number of students in Football:"))
-                                                                                                                                                                                            enter_students(no_f, football)
+    elif choice == '4':
+        no_not_a_or_b = total_students - len(union(group_a, group_b))
+        print(
+            "Number of students who play neither cricket nor badminton is ", no_not_a_or_b)
 
-                                                                                                                                                                                            print(cricket)
-                                                                                                                                                                                            print(badminton)
-                                                                                                                                                                                            print(football)
+    elif choice == '5':
+        no_a_c_not_b = list_difference(union(group_a, group_c), group_b)
+        print("Number of students who play cricket and football but not badminton is ", len(
+            no_a_c_not_b))
 
-                                                                                                                                                                                            print("Student who play both cricket and badminton:", union(cricket, badminton))
-                                                                                                                                                                                            print("student who play either cricket or badminton but not both:", either_sport(cricket, badminton))
-                                                                                                                                                                                            print("No. of students who play neither cricket nor badminton:", count_neither(cricket, badminton))
-                                                                                                                                                                                            print("No. of students who play cricket and football but not badminton:",
-                                                                                                                                                                                                  count_play2_but_not1(cricket, football, badminton))
+    else:
+        print("Please Enter a valid choice.(•_•)")
+        exit_choice = False  # if choice is invalid no need to ask for exit
+
+    if exit_choice:
+        want_continue = input("Do you want to Exit:")
+        if want_continue == 'y' or want_continue == 'Y':
+            break
+    exit_choice = True
+
+print("Successfully Exited... (^_^)")
+
+a=input()
+'''
+10
+6
+1
+3
+4
+6
+7
+9
+6
+2
+4
+5
+6
+7
+9
+5
+1
+4
+6
+7
+8
+
+'''
