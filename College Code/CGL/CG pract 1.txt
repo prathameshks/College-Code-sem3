@@ -1,0 +1,35 @@
+Open terminal {in home}
+
+To install any software 
+~$ sudo apt-get install g++
+
+
+To install libgraph
+1. Go to google search "how to install libgraph in ubuntu"
+2. Go to "https://www.geeksforgeeks.org/add-graphics-h-c-library-gcc-compiler-linux/"
+3. There is link to libgraph "http://download.savannah.gnu.org/releases/libgraph/libgraph-1.0.2.tar.gz"
+4. download file save in home allow download AND in home extract here the downloaded tar.gz file
+5. Then go to terminal 
+	~$sudo apt-get install build-essential
+	~$sudo apt-get install libsdl-image1.2 libsdl-image1.2-dev guile-2.0 guile-2.0-dev libsdl1.2debian libart-2.0-dev libaudiofile-dev libesd0-dev libdirectfb-dev libdirectfb-extra libfreetype6-dev libxext-dev x11proto-xext-dev libfreetype6 libaa1 libaa1-dev libslang2-dev libasound2 libasound2-dev
+	{$yes}
+	if error comes search on google
+6. Go to lib... folder which is extracted  ie. cd lib...
+7. follow next steps on geeks for geeks
+
+8. ~$ gedit demo.cpp {/any.ext } and write cpp file as demo
+
+9. to run the cpp file
+	~$g++ demo.cpp -lgraph -o demo.out
+	{gere g++ is compiler
+	demo.cpp is file
+	-lgraph is to link with graph
+	-o demo.out for file output
+	}
+	~$./demo.out
+	{
+		./demo.out to get output
+	}
+
+	OR
+	~$g++ demo.cpp -lgraph -o demo.out && ./demo.out
