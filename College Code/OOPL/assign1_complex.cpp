@@ -21,13 +21,14 @@ public:
     friend ostream &operator<<(ostream &stream, const Complex &num);
     friend istream &operator>>(ostream &stream, const Complex &num);
 
-    Complex operator+(const Complex num1)
-    {
-        Complex ans;
-        ans.real = float(real + num1.real);
-        ans.imag = float(imag + num1.imag);
-        return ans;
-    }
+    friend Complex operator+(const Complex num2 ,const Complex num1);
+    // Complex operator+(const Complex num1)
+    // {
+    //     Complex ans;
+    //     ans.real = float(real + num1.real);
+    //     ans.imag = float(imag + num1.imag);
+    //     return ans;
+    // }
 
     Complex operator*(Complex num1)
     {
@@ -39,6 +40,15 @@ public:
         return ans;
     }
 };
+
+Complex operator+(const Complex num2 ,const Complex num1){
+Complex ans;
+        ans.real = float(num2.real + num1.real);
+        ans.imag = float(num2.imag + num1.imag);
+        return ans;
+}
+
+
 ostream &operator<<(ostream &stream, const Complex &num)
 {
     if (num.imag < 0)
