@@ -52,9 +52,11 @@ int main()
     line(100,20,30,400);
 	delay(5000); 
 	*/
-	int out;
-	cin>>out;
+	// int out;
+	// cin>>out;
 	
+    getch();
+    
 	closegraph(); 
 	return 0;
 }
