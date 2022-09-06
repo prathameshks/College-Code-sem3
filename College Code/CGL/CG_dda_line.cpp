@@ -38,7 +38,7 @@ int main()
 	int gdriver = DETECT, gmode;
 	initgraph(&gdriver, &gmode, NULL);
 	cout<<"Running init"<<endl;
-	delay(2000);
+	// delay(2000);
 	
 	int x1,y1,x2,y2;
 	cout<<"Enter coords of start :";
