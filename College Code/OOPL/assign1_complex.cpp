@@ -19,7 +19,7 @@ public:
     }
     // Overloading operators
     friend ostream &operator<<(ostream &stream, const Complex &num);
-    friend istream &operator>>(ostream &stream, const Complex &num);
+    friend istream &operator>>(istream &stream, const Complex &num);
 
     friend Complex operator+(const Complex num2 ,const Complex num1);
     // Complex operator+(const Complex num1)
