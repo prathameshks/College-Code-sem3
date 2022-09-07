@@ -56,7 +56,7 @@ while True:
     print("--MENU--")
     print("1.Display Players lists")
     print("2.List of Student playing both cricket and badminton")
-    print("3.List of Student playing both either cricket or badminton but not both")
+    print("3.List of Student playing either cricket or badminton but not both")
     print("4.Number of students who play neither cricket nor badminton")
     print("5.Number of students who play cricket and football but not badminton")
     choice = input("Enter your choice :")
