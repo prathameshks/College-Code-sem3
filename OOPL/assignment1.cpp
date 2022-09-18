@@ -1,96 +1,112 @@
-#include<iostream>
-#include <string>
+#include <iostream>
 using namespace std;
 
-class Complex{
-	public:
-	float real,imag;
-	
-	Complex(){
+class Complex
+{
+public:
+	float real, imag;
+
+	// default constructor
+	Complex()
+	{
 		real = 0;
 		imag = 0;
 	}
-	Complex(float real,float imag){
+	Complex(float real, float imag)
+	{
 		this->real = real;
 		this->imag = imag;
 	}
-	
-	void disp(){
-		cout<<real<<"+"<<imag<<"i"<<endl;
-		
+
+	// to display complex number
+	void disp()
+	{
+		cout << *this;
 	}
-	
-	Complex operator+(Complex num2){
+
+	// addition operator overloading
+	Complex operator+(Complex num2)
+	{
 		Complex res;
 		res.real = (real + num2.real);
 		res.imag = (imag + num2.imag);
 		return res;
 	}
-	
-	Complex operator*(Complex num2){
+
+	// multipication operator overloading
+	Complex operator*(Complex num2)
+	{
 		Complex res;
-		res.real = ((real * num2.real)-(imag * num2.imag));
-		res.imag = ((real * num2.imag)+(imag * num2.real));
+		res.real = ((real * num2.real) - (imag * num2.imag));
+		res.imag = ((real * num2.imag) + (imag * num2.real));
 		return res;
 	}
-	
-	friend ostream &operator<<(ostream &object,Complex &num);
-	friend istream &operator>>(istream &object,Complex &num);
-	
+
+	// insertion and extraction are not of complex class so overloaded using friend function
+	friend ostream &operator<<(ostream &object, Complex &num);
+	friend istream &operator>>(istream &object, Complex &num);
 };
 
-ostream &operator<<(ostream &object,Complex &num){
-	//object<<"working"<<endl;
-	if (num.imag < 0){
-	object<<num.real<<num.imag<<"i"<<endl;
-	}else{
-	object<<num.real<<"+"<<num.imag<<"i"<<endl;
+ostream &operator<<(ostream &object, Complex &num)
+{
+	// displaying complex number
+	if (num.imag < 0)
+	{
+		object << num.real << " " << num.imag << "i";
+	}
+	else
+	{
+		object << num.real << " +" << num.imag << "i";
 	}
 	return object;
 }
 
-istream &operator>>(istream &object,Complex &num){
-	//object<<"working"<<endl;
-	string str;
-	getline(object,str);
-	cout<<str<<"%"<<endl;
-	
-	//object>>num.real>>num.imag;
-	int i,op;
-	n = sizeof(str);
-	for(i = 0;i<n;i++){
-		if ((str[i] == '+')||(str[i] == '-')){
-			num.real = stof(str.substr(0,i));
-			op=i;
-		}else if(str[i] == 'i'){
-			num.imag = stof(str.substr(op,i));
-		}else if(str[i] == ' '){
-			num.real = stof(str.substr(0,i));
-			num.imag = stof(str.substr(i+1,n+1));
+istream &operator>>(istream &object, Complex &num)
+{
+	// real and imag part input
+	object >> num.real >> num.imag;
+	return object;
+}
+
+int main()
+{
+	// Declearing Variables
+	bool loop_control = true;
+	int choice;
+	Complex num1, num2, res;
+	while (loop_control)
+	{
+		cout << "\n---- MENU ----" << endl;
+		cout << "1. Add two Complex numbers\n2. Multiply two Complex Numbers\n3. Exit the Program" << endl;
+		cout << "Enter your choice :";
+		cin >> choice;
+		switch (choice)
+		{
+		case 1:
+			cout << "Enter First Complex Number :";
+			cin >> num1;
+			cout << "Enter Second Complex Number :";
+			cin >> num2;
+			res = num1 + num2;
+			cout << "The Addition of " << num1 << " and " << num2 << " is " << res << endl;
+			break;
+		case 2:
+			cout << "Enter First Complex Number :";
+			cin >> num1;
+			cout << "Enter Second Complex Number :";
+			cin >> num2;
+			res = num1 * num2;
+			cout << "The Multiplication of " << num1 << " and " << num2 << " is " << res << endl;
+			break;
+		case 3:
+			loop_control = false;
+			cout << "Exiting, Thank You :)" << endl;
+			break;
+		default:
+			cout << "Enter a valid choice!" << endl;
 			break;
 		}
 	}
-	return object;
-}
-
-/*
-istream &operator>>(istream &object,Complex &num){
-	//object<<"working"<<endl;
-	object>>num.real>>num.imag;
-	
-	return object;
-}
-*/
-
-int main(){
-	//Complex c1(3,-9);
-	//Complex c2(1,2);
-	//c1.disp();
-	//c2.disp();
-	Complex c1,c2;
-	cin>>c1>>c2;
-	Complex ans = c1*c2;
-	//ans.disp();
-	cout<<ans;
+	cin >> choice;
 	return 0;
 }

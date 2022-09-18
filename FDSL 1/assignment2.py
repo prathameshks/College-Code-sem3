@@ -93,6 +93,10 @@ while True:
 	elif choice == '4':
 		find_max_frequency()
 	elif choice == '5':
+		# global lists for present absent total students
+		marks_of_stu = []
+		present_stu_marks = []
+		absent_stu_list = []
 		add_marks()
 	elif choice == '6':
 		break
