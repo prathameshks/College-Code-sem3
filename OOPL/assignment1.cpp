@@ -80,33 +80,33 @@ int main()
 		cout << "1. Add two Complex numbers\n2. Multiply two Complex Numbers\n3. Exit the Program" << endl;
 		cout << "Enter your choice :";
 		cin >> choice;
-		if (choice == 1)
+		switch (choice)
 		{
+		case 1:
 			cout << "Enter First Complex Number :";
 			cin >> num1;
 			cout << "Enter Second Complex Number :";
 			cin >> num2;
 			res = num1 + num2;
 			cout << "The Addition of " << num1 << " and " << num2 << " is " << res << endl;
-		}
-		else if (choice == 2)
-		{
+			break;
+		case 2:
 			cout << "Enter First Complex Number :";
 			cin >> num1;
 			cout << "Enter Second Complex Number :";
 			cin >> num2;
 			res = num1 * num2;
 			cout << "The Multiplication of " << num1 << " and " << num2 << " is " << res << endl;
-		}
-		else if (choice == 3)
-		{
+			break;
+		case 3:
 			loop_control = false;
 			cout << "Exiting, Thank You :)" << endl;
-		}
-		else
-		{
+			break;
+		default:
 			cout << "Enter a valid choice!" << endl;
+			break;
 		}
 	}
+	cin >> choice;
 	return 0;
 }
