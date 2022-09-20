@@ -67,7 +67,7 @@ def transpose(matrix):
 
 def main():
 	while True:
-		print("MENU".center(50,'-'))
+		print("\n","MENU".center(50,'-'))
 		print("1. Addition of two matrices ")
 		print("2. Subtraction of two matrices ")
 		print("3. Multiplication of two matrices ")
@@ -75,46 +75,31 @@ def main():
 		print("5. Exit the program ")
 		ch = input("Enter your choice :")
 		if ch == '1':
-			can_add = False
-			while not can_add:
-				r1 = int(input("Enter number of rows in matrix 1:"))
-				c1 = int(input("Enter number of columns in matrix 1:"))
-				
-				r2 = int(input("Enter number of rows in matrix 2:"))
-				c2 = int(input("Enter number of columns in matrix 2:"))
-
-				if ((r1!=r2) or (c1!=c2)):
-					print("Order of both Matrix should be Same to Perform Addition.")
-				else:
-					can_add = True
+			r1 = int(input("Enter number of rows in matrix :"))
+			c1 = int(input("Enter number of columns in matrix :"))
+			
 			print("--Enter Matrix 1")
 			mat1 = read(r1,c1)
 			print("--Enter Matrix 2")
-			mat2 = read(r2,c2)
+			mat2 = read(r1,c1)
+
 			res = addition(mat1,mat2)
+
 			print("Addition of Matrix ")
 			display(mat1)
 			print("&")
 			display(mat2)
 			print(" is ")
 			display(res)
-		elif ch == '2':
-			can_sub = False
-			while not can_sub:
-				r1 = int(input("Enter number of rows in matrix 1:"))
-				c1 = int(input("Enter number of columns in matrix 1:"))
-				
-				r2 = int(input("Enter number of rows in matrix 2:"))
-				c2 = int(input("Enter number of columns in matrix 2:"))
 
-				if ((r1!=r2) or (c1!=c2)):
-					print("Order of both Matrix should be Same to Perform Subtraction.")
-				else:
-					can_sub = True
+		elif ch == '2':
+			r1 = int(input("Enter number of rows in matrix :"))
+			c1 = int(input("Enter number of columns in matrix :"))
+				
 			print("--Enter Matrix 1")
 			mat1 = read(r1,c1)
 			print("--Enter Matrix 2")
-			mat2 = read(r2,c2)
+			mat2 = read(r1,c1)
 			res = subtraction(mat1,mat2)
 			print("Subtraction of Matrix ")
 			display(mat1)
@@ -164,3 +149,4 @@ def main():
 			print("Please enter a valid choice.")
 
 main()
+# a=input()
