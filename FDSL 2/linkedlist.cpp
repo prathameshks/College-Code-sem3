@@ -7,6 +7,12 @@ struct Node
     int data;
     struct Node *next;
 };
+// class Node{
+//     public:
+//     int data;
+//     struct Node *next;
+// };
+
 
 void print(Node *h)
 {
@@ -31,7 +37,7 @@ void insert_at(Node *h, int index, int data1)
 {
     if (index == 0)
     {
-        cout << "Can Not insert at index 0, Use insert_start() instead." << endl;
+        cout << "Can Not insert at index 0." << endl;
     }
     else
     {
@@ -81,7 +87,7 @@ void delete_at(Node *h, int index)
 {
     if (index == 0)
     {
-        cout << "Can Not delete at index 0, Use delete_head() instead." << endl;
+        cout << "Can Not delete at index 0." << endl;
     }
     else
     {
@@ -100,11 +106,12 @@ void delete_at(Node *h, int index)
     }
 }
 
-void delete_head(Node **head)
+
+void delete_head(Node* &head)
 {
-    Node *tofree = *head;
-    *head = (*head)->next;
-    free(tofree);
+    Node *tofree = head;
+    head = head->next;
+    delete tofree;
 }
 
 // creating head as global variable to access in functions also
@@ -118,12 +125,13 @@ int main()
     insert_end(head, 26);
     insert_at(head, 0, 2);
     insert_at(head, 6, 269);
-    // delete_head(&head);
+    cout << "**Displaying List\n";
+    print(head);
+    delete_head(head);
     cout << "**Displaying List\n";
     print(head);
     // delete_end(head);
-    delete_at(head, 0);
-    cout << "**Displaying List\n";
-    print(head);
+    // delete_at(head, 0);
+    
     return 0;
 }

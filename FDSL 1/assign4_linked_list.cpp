@@ -22,10 +22,10 @@ void print_list(Node<T>* n){
 }
 
 int main(){
-	Node<int> *node1 = new Node<int>();
-	Node<int> *node2 = new Node<int>();
-	Node<int> *node3 = new Node<int>();
-	Node<int> *node4 = new Node<int>();
+	Node<int> *node1 = new Node<int>(1);
+	Node<int> *node2 = new Node<int>(2);
+	Node<int> *node3 = new Node<int>(3);
+	Node<int> *node4 = new Node<int>(4);
 	
 	Node<int> *head=node1;
 	
