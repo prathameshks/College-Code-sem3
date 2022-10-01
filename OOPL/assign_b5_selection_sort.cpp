@@ -5,14 +5,6 @@ Write a function template for selection sort that inputs, sorts and outputs an i
 using namespace std;
 
 template <class type>
-void swap(type *n1, type *n2)
-{
-    type temp = *n1;
-    *n1 = *n2;
-    *n2 = temp;
-}
-
-template <class type>
 void Selection_sort(type arr[], int length)
 {
     // minimun index variable
