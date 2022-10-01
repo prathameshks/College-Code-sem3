@@ -148,12 +148,13 @@ void delete_member(node *head, string prn)
 {
     node *temp = new node;
     temp = head;
-    while (temp != NULL)
+    while (temp->next != NULL)
     {
-        /* code */
         if (temp->next->prn == prn)
         {
+            node *tofree = temp->next;
             temp->next = temp->next->next;
+            delete tofree;
         }
         temp = temp->next;
     }
@@ -201,11 +202,7 @@ int main()
 
     // creating lists
     node *list1 = start('A');
-    // node *list2 = start('B');
-
-    // test declearation for easy testing
-    //  node *list1 = new node;
-    node *list2 = new node;
+    node *list2 = start('B');
 
     // loop
     while (while_var)
