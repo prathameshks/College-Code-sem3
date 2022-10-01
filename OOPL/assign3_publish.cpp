@@ -113,20 +113,20 @@ int main(){
 		cout<<"4. Display all Tape data"<<endl;
 		cout<<"5. Display count of Books and Tape"<<endl;
 		cout<<"6. Exit."<<endl;
-		cout<<"Enter your Choice";
+		cout<<"Enter your Choice:";
 		cin>>choice;
 		switch (choice){
 			case 1:
 				book_rec = new book;
 				book_rec->set_data();
 				book_record.push_back(book_rec);
-				cout<<"Book record added sucessfully 😀️"<<endl;
+				cout<<"Book record added sucessfully :)"<<endl;
 				break;
 			case 2:
 				tape_rec = new tape;
 				tape_rec->set_data();
 				tape_record.push_back(tape_rec);
-				cout<<"Tape record added sucessfully 😀️"<<endl;
+				cout<<"Tape record added sucessfully :)"<<endl;
 				break;
 			case 3:
 				for(i=0;i<book_record.size();i++){
@@ -149,14 +149,12 @@ int main(){
 				break;
 			case 6:
 				loop_control = false;
-				cout<<"Sad to see you go...😭️"<<endl;
+				cout<<"Thank You"<<endl;
 				break;
 			
 			default:
 				break;
 		}
-		//loop_control = false;
-		
 	}
 	return 0;
 }
