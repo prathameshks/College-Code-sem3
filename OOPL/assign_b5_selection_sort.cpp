@@ -49,19 +49,40 @@ void display(type *arr, int length)
 int main()
 {
     int n;
-    int arr[10];
-    cout<<"Enter Number of elements in Array:";
-    cin>>n;
-    cout<<"Enter elements of array:"<<endl;
-    for(int i = 0;i<n;i++){
-        cin>>arr[i];
+
+    int arr1[10];
+    float arr2[10];
+
+    cout << "Enter Number of elements in Integer Array:";
+    cin >> n;
+    cout << "Enter elements of array:" << endl;
+    for (int i = 0; i < n; i++)
+    {
+        cin >> arr1[i];
     }
-    cout<<"Array Entered is "<<endl;
-    display<int>(arr, n);
-    //sorting array
-    Selection_sort<int>(arr, n);
+    cout << "Array Entered is " << endl;
+    display<int>(arr1, n);
+    // sorting array
+    Selection_sort<int>(arr1, n);
+
+    cout << "Array After sorting is " << endl;
+    display<int>(arr1, n);
+
+
+    cout << "Enter Number of elements in Float Array:";
+    cin >> n;
+    cout << "Enter elements of array:" << endl;
+    for (int i = 0; i < n; i++)
+    {
+        cin >> arr2[i];
+    }
+    cout << "Array Entered is " << endl;
+    display<float>(arr2, n);
+    // sorting array
+    Selection_sort<float>(arr2, n);
+
+    cout << "Array After sorting is " << endl;
+    display<float>(arr2, n);
     
-    cout<<"Array After sorting is "<<endl;
-    display<int>(arr, n);
     return 0;
 }
