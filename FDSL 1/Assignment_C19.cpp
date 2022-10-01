@@ -1,12 +1,14 @@
 #include <iostream>
 using namespace std;
 
+// node defination
 class node
 {
 public:
     string prn;
     string name;
     node *next;
+    // constructors
     node()
     {
         prn = "";
@@ -21,34 +23,10 @@ public:
     }
 };
 
+// predeclearation of function count
 int member_count(node *);
-void display_data(node *head)
-{
-    node *temp = head;
 
-    if (member_count(head) >= 1)
-    {
-        cout << "President\nPRN: " << temp->prn;
-        cout << " NAME: " << temp->name << endl;
-        temp = temp->next;
-        int count = 1;
-        cout << "Members " << endl;
-        while (temp->next != NULL)
-        {
-            cout << count << ". PRN: " << temp->prn;
-            cout << " NAME: " << temp->name << endl;
-            temp = temp->next;
-            count++;
-        }
-        cout << "Secretary\nPRN: " << temp->prn;
-        cout << " NAME: " << temp->name << endl;
-    }
-    else
-    {
-        cout << "Empty List" << endl;
-    }
-}
-
+// function to display data
 void display_list(node *head)
 {
     node *temp = head;
@@ -70,6 +48,7 @@ void display_list(node *head)
     }
 }
 
+// fucntion to add president to list
 void add_president(node *&head, string prn, string name)
 {
     node *new_president = new node(prn, name);
@@ -77,6 +56,7 @@ void add_president(node *&head, string prn, string name)
     head = new_president;
 }
 
+// fucntion to add secretory to list
 void add_secretary(node *head, string prn, string name)
 {
     node *new_secretary = new node(prn, name);
@@ -89,6 +69,7 @@ void add_secretary(node *head, string prn, string name)
     temp->next = new_secretary;
 }
 
+// fucntion to add member to list
 void add_member(node *head, string prn, string name)
 {
     node *new_member = new node(prn, name);
@@ -102,6 +83,7 @@ void add_member(node *head, string prn, string name)
     temp->next = new_member;
 }
 
+// fucntion to count number of members
 int member_count(node *head)
 {
     node *temp = head;
@@ -115,6 +97,7 @@ int member_count(node *head)
     return count;
 }
 
+// recursive function to display list in reverse order
 void display_reverse(node *cur)
 {
     if (cur != NULL)
@@ -125,6 +108,7 @@ void display_reverse(node *cur)
     }
 }
 
+// function to concatinate two lists ie 2 to 1 and 2 will be empty
 void concatinate(node *head1, node *&head2)
 {
     node *temp = new node;
@@ -137,6 +121,7 @@ void concatinate(node *head1, node *&head2)
     head2 = NULL;
 }
 
+// function to delete president
 void delete_president(node *&head)
 {
     node *tofree = head;
@@ -144,6 +129,7 @@ void delete_president(node *&head)
     delete tofree;
 }
 
+// function to delete secretory
 void delete_secretory(node *head)
 {
     node *temp = new node;
@@ -157,6 +143,7 @@ void delete_secretory(node *head)
     delete tofree;
 }
 
+// function to delete member
 void delete_member(node *head, string prn)
 {
     node *temp = new node;
@@ -172,6 +159,7 @@ void delete_member(node *head, string prn)
     }
 }
 
+// function to swap current list
 void swap(node *&l1, node *&l2)
 {
     node *temp = l1;
@@ -179,6 +167,7 @@ void swap(node *&l1, node *&l2)
     l2 = temp;
 }
 
+// fucntion to initialize the list with president and secretory
 node *start(char cur)
 {
     string prn, name;
@@ -201,20 +190,24 @@ node *start(char cur)
     return list;
 }
 
+// main function run
 int main()
 {
+    // variables for run control
     char current = 'A';
     string prn, name;
     int choice, choice2;
     bool while_var = true;
-    
+
     // creating lists
     node *list1 = start('A');
     // node *list2 = start('B');
 
-    // node *list1 = new node;
+    // test declearation for easy testing
+    //  node *list1 = new node;
     node *list2 = new node;
 
+    // loop
     while (while_var)
     {
         cout << "\n----------------------------------" << endl;
@@ -234,7 +227,7 @@ int main()
         {
         case 1:
             cout << "\nThe Members of Class " << current << " are as: " << endl;
-            display_data(list1);
+            display_list(list1);
             break;
         case 2:
             cout << "\n1. Add President" << endl;
