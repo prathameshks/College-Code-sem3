@@ -332,5 +332,6 @@ int main()
             break;
         }
     }
+    cin>>choice2;
     return 0;
 }
