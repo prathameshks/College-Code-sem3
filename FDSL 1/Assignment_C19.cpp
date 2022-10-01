@@ -157,37 +157,21 @@ void delete_secretory(node *head)
     delete tofree;
 }
 
-void delete_member_prn(node *head, string prn)
+void delete_member(node *head, string prn)
 {
     node *temp = new node;
     temp = head;
-    while (temp->next != NULL)
+    while (temp != NULL)
     {
-        if (temp->next->prn == prn)
-        {
-            node *tofree = temp->next;
+        /* code */
+        if (temp->next->prn == prn){
             temp->next = temp->next->next;
-            delete tofree;
         }
         temp = temp->next;
     }
+    
 }
 
-void delete_member_name(node *head, string name)
-{
-    node *temp = new node;
-    temp = head;
-    while (temp->next != NULL)
-    {
-        if (temp->next->name == name)
-        {
-            node *tofree = temp->next;
-            temp->next = temp->next->next;
-            delete tofree;
-        }
-        temp = temp->next;
-    }
-}
 void swap(node *&l1, node *&l2)
 {
     node *temp = l1;
@@ -195,9 +179,32 @@ void swap(node *&l1, node *&l2)
     l2 = temp;
 }
 
+node *start(char cur)
+{
+    string prn, name;
+    cout << "Enter Details for Class " << cur << endl;
+
+    cout << "Enter the PRN of President:";
+    cin >> prn;
+    cout << "Enter the Name of President:";
+    cin.ignore();
+    getline(cin, name);
+    node *list = new node(prn, name);
+    // add_president(list, prn, name);
+
+    cout << "Enter the PRN of Secretory:";
+    cin >> prn;
+    cout << "Enter the Name of Secretory:";
+    cin.ignore();
+    getline(cin, name);
+    add_secretary(list, prn, name);
+
+    return list;
+}
+
 int main()
 {
-    string current = "Class A";
+    char current = 'A';
     string prn, name;
     int choice, choice2;
     bool while_var = true;
@@ -209,14 +216,21 @@ int main()
     // getline(cin, name);
 
     // node *list1 = new node(prn,name);
-    node *list1 = new node();
-    node *list2 = new node();
+
+    //creating lists
+    // node *list1 = start('A');
+    node *list1 = start('A');
+    
+    // node *list2 = start('B');
+
+
     // add_president(list1,"256","prathamsejsi ");
     // cout<<member_count(list1);
     while (while_var)
     {
+        cout << "===========================" << endl;
         cout << "\n---PINNACLE CLUB---" << endl;
-        cout << "*Current list is " << current << endl;
+        cout << "*Current list is Class " << current << endl;
         cout << "1. Display Current List" << endl;
         cout << "2. Add Member" << endl;
         cout << "3. Delete Member" << endl;
@@ -233,69 +247,77 @@ int main()
             display_list(list1);
             break;
         case 2:
-            if (member_count(list1) >= 1)
-            {
-                cout << "1. Add President" << endl;
-                cout << "2. Add Member" << endl;
-                cout << "3. Add Secretory" << endl;
-                cout << "Enter your choice:";
-                cin >> choice2;
-            }
-            else
-            {
-                choice2 = 1;
-            }
-
-            cout << "Enter the PRN:";
-            cin >> prn;
-            cout << "Enter the Name :";
-            cin.ignore();
-            getline(cin, name);
+            cout << "\n1. Add President" << endl;
+            cout << "2. Add Member" << endl;
+            cout << "3. Add Secretory" << endl;
+            cout << "Enter your choice:";
+            cin >> choice2;
 
             switch (choice2)
             {
             case 1:
+                cout << "Enter the PRN of President:";
+                cin >> prn;
+                cout << "Enter the Name of President:";
+                cin.ignore();
+                getline(cin, name);
                 add_president(list1, prn, name);
+            cout << "President added sucessfully to " << current << endl;
+
                 break;
             case 2:
+                cout << "Enter the PRN:";
+                cin >> prn;
+                cout << "Enter the Name :";
+                cin.ignore();
+                getline(cin, name);
                 add_member(list1, prn, name);
+            cout << "Member added sucessfully to " << current << endl;
                 break;
             case 3:
+                cout << "Enter the PRN of Secretory:";
+                cin >> prn;
+                cout << "Enter the Name of Secretory:";
+                cin.ignore();
+                getline(cin, name);
                 add_secretary(list1, prn, name);
+            cout << "Secretory added sucessfully to " << current << endl;
                 break;
             default:
                 cout << "Enter a valid choice" << endl;
                 break;
             }
 
-            // add_member(list1, prn, name);
-            // delete_secretory(list1);
-            // delete_member_name(list1,"");
-            cout << "Member added sucessfully to " << current << endl;
             break;
         case 3:
-        cout << "1. Delete President" << endl;
-                cout << "2. Delete Member" << endl;
-                cout << "3. Delete Secretory" << endl;
-                cout << "Enter your choice:";
-                cin >> choice2;
-                switch (choice2)
-                {
-                case 1:
-                    delete_president(list1);
-                    break;
-                case 2:
-                    cout<<"Enter PRN to delete:";
-                    cin>>prn;
-                    delete_member_prn(list1,prn);
-                    break;
-                case 3:
-                    delete_secretory(list1);
-                    break;
-                default:
-                    break;
-                }
-        break;
+            cout << "1. Delete President" << endl;
+            cout << "2. Delete Member" << endl;
+            cout << "3. Delete Secretory" << endl;
+            cout << "Enter your choice:";
+            cin >> choice2;
+            switch (choice2)
+            {
+            case 1:
+                delete_president(list1);
+                break;
+            case 2:
+                cout << "Enter PRN to delete:";
+                cin >> prn;
+                delete_member(list1, prn);
+                break;
+            case 3:
+                delete_secretory(list1);
+                break;
+            default:
+                cout << "Enter a valid choice" << endl;
+
+                break;
+            }
+            break;
+
+        case 8:
+            while_var = false;
+            break;
         default:
             cout << "Enter a valid choice..." << endl;
             break;
@@ -305,6 +327,16 @@ int main()
 }
 
 /*
+1
+1
+2
+2
+2
+3
+3
+3
+1
+
         cout<<"2. Add Secretary in Class A"<<endl;
         cout<<"3. Add Member in Class A"<<endl;
         cout<<"1. Delete President in Class A"<<endl;
