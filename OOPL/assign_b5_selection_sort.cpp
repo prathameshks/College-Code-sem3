@@ -75,6 +75,6 @@ int main()
 
     cout << "Array After sorting is " << endl;
     display<float>(arr2, n);
-    
+    cin>>n;
     return 0;
 }
