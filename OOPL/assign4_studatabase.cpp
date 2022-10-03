@@ -9,9 +9,9 @@ using namespace std;
 
 
 class information{
-	string name,dob,bloodgrp,mob_num,address,dl_num,;
+	string name,dob,bloodgrp,mob_num,address,dl_num;
 	
-	public
+	public:
 	information(){
 		name = "ABC";
 		dob = "dd/mm/yyyy";
@@ -21,18 +21,35 @@ class information{
 		dl_num = "MH01/0123/0123456";
 	}
 	information(const information &obj){
-		
+		this->name = obj.name;
+		this->dob = obj.dob;
+		this->bloodgrp = obj.bloodgrp;
+		this->mob_num = obj.mob_num;
+		this->address = obj.address;
+		this->dl_num = obj.dl_num;
 	}
 	friend class student;
 };
+
 class student{
 	int roll_no;
-	string class,remark;
+	string class_name,remark;
 	char div;
+	static int student_count;
+public:
+	student(){
+		student_count++;
+	}
+	static int get_student_count(){
+		return student_count;
+	}
 };
 
+int student::student_count;
 
 int main(){
 	student *stuname[100];
+	student obj,o2o3,o4;
+	cout<<obj.get_student_count();
 	return 0;
 }
