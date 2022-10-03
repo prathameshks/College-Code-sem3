@@ -4,7 +4,7 @@ Write a function template for selection sort that inputs, sorts and outputs an i
 #include <iostream>
 using namespace std;
 
-template <class type>
+template <typename type>
 void Selection_sort(type arr[], int length)
 {
     // minimun index variable
