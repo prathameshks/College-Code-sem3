@@ -45,7 +45,7 @@ public:
 	}
 };
 
-int student::student_count;
+int student::student_count=0;
 
 int main(){
 	student *stuname[100];
