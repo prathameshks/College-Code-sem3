@@ -128,6 +128,7 @@ int main()
     int x, y, r;
 
     int x1, x2, y1, y2;
+    delay(2000);
     cout << "Which Pattern You want to draw(1 or 2):";
     cin >> ch;
     if (ch == 1)
@@ -161,3 +162,5 @@ int main()
     closegraph();
     return 0;
 }
+
+//link to folder https://mescoeorg-my.sharepoint.com/:f:/g/personal/f21111015_mescoeorg_onmicrosoft_com/Em4DXyPVuj9CnURtwz-t-2MBBCg2fmeiFtllFPOhk5TPfA?e=vIwhJe
