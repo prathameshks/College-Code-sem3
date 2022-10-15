@@ -5,6 +5,7 @@ Construct the database with suitable member functions. Make use of constructor, 
 */
 #include <iostream>
 #include <iomanip>
+#include <fstream>
 #define max 100
 
 using namespace std;
@@ -73,6 +74,7 @@ public:
 	}
 	friend class student;
 	friend void display_all(student *s_list[], information *s_info[]);
+	friend void save_data(student *s_list[], information *s_info[]);
 };
 
 class student
@@ -116,6 +118,7 @@ public:
 
 	friend int search_stu(int roll, student *s_list[]);
 	friend void display_all(student *s_list[], information *s_info[]);
+	friend void save_data(student *s_list[], information *s_info[]);
 
 	inline static int get_student_count()
 	{
@@ -271,6 +274,79 @@ int search_stu(int roll, student *s_list[])
 	return -1;
 }
 
+void save_data(student *s_list[], information *s_info[])
+{
+	ofstream data_file("StudentData.txt");
+	char sep = '$';
+	try
+	{
+		for (int i = 0; i < student::get_student_count(); i++)
+		{
+			// pretty_print<int, char>(i + 1, s_info[i]->name, s_list[i]->roll_no, s_list[i]->class_name, s_list[i]->div, s_info[i]->dob, s_info[i]->bloodgrp, s_info[i]->mob_num, s_info[i]->dl_num, s_info[i]->address, s_list[i]->remark);
+			data_file << s_info[i]->name << sep << s_list[i]->roll_no << sep << s_list[i]->class_name << sep << s_list[i]->div << sep << s_info[i]->dob << sep << s_info[i]->bloodgrp << sep << s_info[i]->mob_num << sep << s_info[i]->dl_num << sep << s_info[i]->address << sep << s_list[i]->remark << endl;
+		}
+	}
+	catch (exception e)
+	{
+		cout << e.what();
+	}
+	data_file.close();
+}
+
+void load_data(int *current, student *s_list[], information *s_info[])
+{
+	// ofstream data_file("StudentData.txt");
+	// data_file.close();
+
+	ifstream data_file("StudentData.txt");
+	if (data_file)
+	{
+		cout << "Loading Previous Data, Please Wait..."<<endl;
+	}
+	else
+	{
+		// cout << "file doesn't exist";
+		return;
+	}
+
+	char sep = '$';
+	string line;
+	// string name,roll,cls,div,dob,bgrp,mobile,dlno,add,remark="";
+	string name, cls, dob, bgrp, mobile, dlno, add, remark = "";
+	int roll;
+	char div;
+	string all_data[10] = "";
+	int last, line_index;
+	while (data_file.eof() == 0)
+	{
+		getline(data_file, line);
+		if (line == "")
+		{
+			continue;
+		}
+
+		last = 0;
+		line_index = 0;
+		for (int i = 0; i < line.size(); i++)
+		{
+			if (line[i] == sep)
+			{
+				all_data[line_index] = line.substr(last, i - last);
+				last = i + 1;
+				line_index++;
+			}
+		}
+		all_data[line_index] = line.substr(last,line.size()-last);
+
+		// passign values to function for object creation
+		s_info[*current] = new information(all_data[0], all_data[4], all_data[5], all_data[6], all_data[8], all_data[7]);
+		s_list[*current] = new student(stoi(all_data[1]), all_data[2], all_data[3][0], all_data[9]);
+		(*current)++;
+	}
+	data_file.close();
+	cout<<"Imported "<<*current<<" records."<<endl;
+}
+
 int main()
 {
 	student *stu_list[max];
@@ -278,11 +354,13 @@ int main()
 	bool while_control = true;
 	int srch, ind, choice, current = 0;
 
-	stu_list[0] = new student(15, "SE Comp", 'A', "Good");
-	stu_list[1] = new student(8, "SE Comp", 'A', "Nice");
-	stu_info[0] = new information("Prathamesh Sable", "06/02/2003", "AB+", "7448006155", "Bhoom maharashtra", "MH25/0147/7410852");
-	stu_info[1] = new information("Omkar C", "28/11/2003", "B+", "7410852096", "Kolhapur maharashtra", "NA");
-	current = 2;
+	// stu_list[0] = new student(15, "SE Comp", 'A', "Good");
+	// stu_list[1] = new student(8, "SE Comp", 'A', "Nice");
+	// stu_info[0] = new information("Prathamesh Sable", "06/02/2003", "AB+", "7448006155", "Bhoom maharashtra", "MH25/0147/7410852");
+	// stu_info[1] = new information("Omkar C", "28/11/2003", "B+", "7410852096", "Kolhapur maharashtra", "NA");
+	// current = 2;
+	// save_data(stu_list, stu_info);
+	load_data(&current, stu_list, stu_info);
 
 	while (while_control)
 	{
@@ -292,7 +370,8 @@ int main()
 		cout << "  3. Search and Display Student Record" << endl;
 		cout << "  4. Delete Student Record" << endl;
 		cout << "  5. Edit Student Record" << endl;
-		cout << "  6. Exit" << endl;
+		cout << "  6. Save" << endl;
+		cout << "  7. Save & Exit" << endl;
 		cout << "Enter your choice:";
 		cin >> choice;
 		cout << endl;
@@ -372,6 +451,12 @@ int main()
 			}
 			break;
 		case 6:
+			save_data(stu_list, stu_info);
+			cout << "Data Saved Sucessfully" << endl;
+			break;
+
+		case 7:
+			save_data(stu_list, stu_info);
 			cout << "Thank you for using Application:)" << endl;
 			while_control = false;
 			break;
@@ -396,5 +481,7 @@ se comp2
 b
 13
 
+Prathamesh Sable$15$SE Comp$A$06/02/2003$AB+$7448006155$MH25/0147/7410852$Bhoom maharashtra$Good
+Omkar C$8$SE Comp$A$28/11/2003$B+$7410852096$NA$Kolhapur maharashtra$Nice
 
 */
