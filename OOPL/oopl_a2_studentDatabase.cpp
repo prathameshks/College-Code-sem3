@@ -6,7 +6,7 @@ Construct the database with suitable member functions. Make use of constructor, 
 #include <iostream>
 #include <iomanip>
 #include <fstream>
-#define max 100
+#define max 100 // defining size of max array
 
 using namespace std;
 class student;
@@ -301,7 +301,7 @@ void load_data(int *current, student *s_list[], information *s_info[])
 	ifstream data_file("StudentData.txt");
 	if (data_file)
 	{
-		cout << "Loading Previous Data, Please Wait..."<<endl;
+		cout << "Loading Previous Data, Please Wait..." << endl;
 	}
 	else
 	{
@@ -336,7 +336,7 @@ void load_data(int *current, student *s_list[], information *s_info[])
 				line_index++;
 			}
 		}
-		all_data[line_index] = line.substr(last,line.size()-last);
+		all_data[line_index] = line.substr(last, line.size() - last);
 
 		// passign values to function for object creation
 		s_info[*current] = new information(all_data[0], all_data[4], all_data[5], all_data[6], all_data[8], all_data[7]);
@@ -344,22 +344,18 @@ void load_data(int *current, student *s_list[], information *s_info[])
 		(*current)++;
 	}
 	data_file.close();
-	cout<<"Imported "<<*current<<" records."<<endl;
+	cout << "Imported " << *current << " records." << endl;
 }
 
 int main()
 {
+	// list of pointers for data
 	student *stu_list[max];
 	information *stu_info[max];
 	bool while_control = true;
 	int srch, ind, choice, current = 0;
 
-	// stu_list[0] = new student(15, "SE Comp", 'A', "Good");
-	// stu_list[1] = new student(8, "SE Comp", 'A', "Nice");
-	// stu_info[0] = new information("Prathamesh Sable", "06/02/2003", "AB+", "7448006155", "Bhoom maharashtra", "MH25/0147/7410852");
-	// stu_info[1] = new information("Omkar C", "28/11/2003", "B+", "7410852096", "Kolhapur maharashtra", "NA");
-	// current = 2;
-	// save_data(stu_list, stu_info);
+	// load past data
 	load_data(&current, stu_list, stu_info);
 
 	while (while_control)
@@ -378,8 +374,15 @@ int main()
 		switch (choice)
 		{
 		case 1:
-			add_student(current, stu_list, stu_info);
-			current++;
+			if (current < 100)
+			{
+				add_student(current, stu_list, stu_info);
+				current++;
+			}
+			else
+			{
+				cout << "Can't add student record, Because Reached the limit of records." << endl;
+			}
 			break;
 		case 2:
 			cout << "Found " << student::get_student_count() << " records." << endl;
@@ -480,8 +483,6 @@ mh14/1452/278122
 se comp2
 b
 13
-
-Prathamesh Sable$15$SE Comp$A$06/02/2003$AB+$7448006155$MH25/0147/7410852$Bhoom maharashtra$Good
-Omkar C$8$SE Comp$A$28/11/2003$B+$7410852096$NA$Kolhapur maharashtra$Nice
+rem
 
 */
