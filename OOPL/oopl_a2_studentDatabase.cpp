@@ -116,6 +116,7 @@ public:
 		student_count--;
 	}
 
+	// friend functions
 	friend int search_stu(int roll, student *s_list[]);
 	friend void display_all(student *s_list[], information *s_info[]);
 	friend void save_data(student *s_list[], information *s_info[]);
@@ -191,8 +192,9 @@ public:
 
 int student::student_count = 0;
 
+// print row function
 template <class i, class c>
-void pretty_print(i sr, string name, i roll, string cls, c div, string dob, string bgrp, string mobile, string dlno, string add, string remark, char sep = '|')
+void row_print(i sr, string name, i roll, string cls, c div, string dob, string bgrp, string mobile, string dlno, string add, string remark, char sep = '|')
 {
 	cout << sep << setw(5) << right << sr << sep;
 	cout << setw(15) << left << name.substr(0, 15) << sep;
@@ -207,23 +209,24 @@ void pretty_print(i sr, string name, i roll, string cls, c div, string dob, stri
 	cout << setw(15) << left << remark.substr(0, 15) << sep << endl;
 }
 
+// display all data
 void display_all(student *s_list[], information *s_info[])
 {
-	pretty_print<string, string>("-----", "---------------", "-------", "---------", "---", "----------", "---------", "-------------", "-----------------", "--------------------", "---------------", '+');
-	pretty_print<string, string>("Sr No", "Student Name", "Roll No", "Class", "Div", "Birth Date", "Blood Grp", "Mobile Number", "DL Number", "Adderss of Student", "Remarks(if any)");
-	pretty_print<string, string>("-----", "---------------", "-------", "---------", "---", "----------", "---------", "-------------", "-----------------", "--------------------", "---------------", '+');
+	row_print<string, string>("-----", "---------------", "-------", "---------", "---", "----------", "---------", "-------------", "-----------------", "--------------------", "---------------", '+');
+	row_print<string, string>("Sr No", "Student Name", "Roll No", "Class", "Div", "Birth Date", "Blood Grp", "Mobile Number", "DL Number", "Adderss of Student", "Remarks(if any)");
+	row_print<string, string>("-----", "---------------", "-------", "---------", "---", "----------", "---------", "-------------", "-----------------", "--------------------", "---------------", '+');
 	try
 	{
 		for (int i = 0; i < student::get_student_count(); i++)
 		{
-			pretty_print<int, char>(i + 1, s_info[i]->name, s_list[i]->roll_no, s_list[i]->class_name, s_list[i]->div, s_info[i]->dob, s_info[i]->bloodgrp, s_info[i]->mob_num, s_info[i]->dl_num, s_info[i]->address, s_list[i]->remark);
+			row_print<int, char>(i + 1, s_info[i]->name, s_list[i]->roll_no, s_list[i]->class_name, s_list[i]->div, s_info[i]->dob, s_info[i]->bloodgrp, s_info[i]->mob_num, s_info[i]->dl_num, s_info[i]->address, s_list[i]->remark);
 		}
 	}
 	catch (exception e)
 	{
 		cout << e.what();
 	}
-	pretty_print<string, string>("-----", "---------------", "-------", "---------", "---", "----------", "---------", "-------------", "-----------------", "--------------------", "---------------", '+');
+	row_print<string, string>("-----", "---------------", "-------", "---------", "---", "----------", "---------", "-------------", "-----------------", "--------------------", "---------------", '+');
 }
 
 void add_student(int index, student *s_list[], information *s_info[])
@@ -282,7 +285,7 @@ void save_data(student *s_list[], information *s_info[])
 	{
 		for (int i = 0; i < student::get_student_count(); i++)
 		{
-			// pretty_print<int, char>(i + 1, s_info[i]->name, s_list[i]->roll_no, s_list[i]->class_name, s_list[i]->div, s_info[i]->dob, s_info[i]->bloodgrp, s_info[i]->mob_num, s_info[i]->dl_num, s_info[i]->address, s_list[i]->remark);
+			// add record to file
 			data_file << s_info[i]->name << sep << s_list[i]->roll_no << sep << s_list[i]->class_name << sep << s_list[i]->div << sep << s_info[i]->dob << sep << s_info[i]->bloodgrp << sep << s_info[i]->mob_num << sep << s_info[i]->dl_num << sep << s_info[i]->address << sep << s_list[i]->remark << endl;
 		}
 	}
@@ -295,9 +298,7 @@ void save_data(student *s_list[], information *s_info[])
 
 void load_data(int *current, student *s_list[], information *s_info[])
 {
-	// ofstream data_file("StudentData.txt");
-	// data_file.close();
-
+	// checking if file exists
 	ifstream data_file("StudentData.txt");
 	if (data_file)
 	{
@@ -305,16 +306,12 @@ void load_data(int *current, student *s_list[], information *s_info[])
 	}
 	else
 	{
-		// cout << "file doesn't exist";
+		// file doesn't exist
 		return;
 	}
 
 	char sep = '$';
 	string line;
-	// string name,roll,cls,div,dob,bgrp,mobile,dlno,add,remark="";
-	string name, cls, dob, bgrp, mobile, dlno, add, remark = "";
-	int roll;
-	char div;
 	string all_data[10] = "";
 	int last, line_index;
 	while (data_file.eof() == 0)
@@ -322,6 +319,7 @@ void load_data(int *current, student *s_list[], information *s_info[])
 		getline(data_file, line);
 		if (line == "")
 		{
+			// skip empty line
 			continue;
 		}
 
@@ -374,7 +372,7 @@ int main()
 		switch (choice)
 		{
 		case 1:
-			if (current < 100)
+			if (current < 100) // condition to check limit
 			{
 				add_student(current, stu_list, stu_info);
 				current++;
