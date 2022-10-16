@@ -414,7 +414,7 @@ int main() {
         }
         cout << endl;
     }
-    cin >> choice;
+    // cin >> choice;
     return 0;
 }
 
