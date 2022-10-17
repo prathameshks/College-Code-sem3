@@ -274,7 +274,7 @@ void load_data(int *current, student *s_list[], information *s_info[]) {
 
     char sep = '$';
     string line;
-    string all_data[10] = "";
+    string all_data[10] = {""};
     int last, line_index;
     while (data_file.eof() == 0) {
         getline(data_file, line);
