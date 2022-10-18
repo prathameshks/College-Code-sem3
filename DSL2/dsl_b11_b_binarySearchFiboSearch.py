@@ -1,22 +1,32 @@
 def binary_search(arr,start,end,key):
-    mid = (start+end)//2
-    if (arr[mid]==key):
-        return mid
-    if(arr[mid]>key):
-        return binary_search(arr,start,mid-1,key)
-    if(arr[mid]<key):
-        return binary_search(arr,mid+1,end,key)
-    return -1
+    if end>=start:
+        mid = (start+end)//2
+        if (arr[mid]==key):
+            return mid
+        elif(arr[mid]>key):
+            return binary_search(arr,start,mid-1,key)
+        else:
+            return binary_search(arr,mid+1,end,key)
+    else:
+        return -1
 
 def fibo_search(arr,key):
     n=len(arr)
     fibo = [0,1]
     while(fibo[-1]<n):
         fibo.append(fibo[-2]+fibo[-1])
-    m = len(fibo)
     offset = -1
-    i = min(offset+fibo[m-2],n-1)
-    
+    m = len(fibo)-1
+    while(fibo[m]>0):
+        i = min(offset+fibo[m-2],n-1)
+        if arr[i]<key:
+            m-=1
+            offset = i
+        elif arr[i]>key:
+            m-=2
+        else:
+            return i
+    return -1
 
 def enter_array():
     arr=[]
@@ -34,6 +44,7 @@ def enter_array():
             arr[i], arr[min_ind]= arr[min_ind],arr[i];
     return arr
 
+arr = enter_array()
 while True:
     print("-"*30)
     print("MENU".center(30))
@@ -42,13 +53,13 @@ while True:
     if choice==1:
         arr = enter_array()
         print("Array Created Sucessfully")
-            
+        
     elif choice==2:
         print("Array is ",arr)
         
     elif choice==3:
         elmt = int(input("Enter roll number to search:"))
-        res = binary_search(arr,0,len(arr),elmt)
+        res = binary_search(arr,0,len(arr)-1,elmt)
         if res == -1:
             print("Student has not attended training.")
         else:
@@ -63,15 +74,13 @@ while True:
             print("Student has attended training, Found at index",res)
 
     elif choice==5:
+        print("Thank You.")
         break
     else:
         print("Enter a valid choice")
         
-t=int(input(""))
-"""
+t=input("")
 
-                
-"""
 """ 
 1
 10

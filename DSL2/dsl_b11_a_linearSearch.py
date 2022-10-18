@@ -47,6 +47,7 @@ while True:
 			print("Student has attended training, Found at index",res)
 			
 	elif choice==3:
+		print("Thank You.")
 		break
 	else:
 		print("Enter a valid choice")
