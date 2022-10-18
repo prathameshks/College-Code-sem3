@@ -1,17 +1,10 @@
-"""
-Write a Python program to store roll numbers of student array who attended training
-program in sorted order. Write function for searching whether particular student
-attended training program or not, using Binary search and Fibonacci search
-"""
-arr=[]
-
 def binary_search(arr,start,end,key):
     mid = (start+end)//2
     if (arr[mid]==key):
         return mid
-    elif(arr[mid]>key):
+    if(arr[mid]>key):
         return binary_search(arr,start,mid-1,key)
-    else:
+    if(arr[mid]<key):
         return binary_search(arr,mid+1,end,key)
     return -1
 
@@ -28,10 +21,10 @@ def fibo_search(arr,key):
 def enter_array():
     arr=[]
     n=int(input("Enter number of students:"))
-
+    # input array in random order
     for _ in range(n):
         arr.append(int(input("Enter roll number:")))
-    
+    # sorting array using selection sort
     for i in range(n):
         min_ind = i
         for j in range(i + 1, n):
@@ -74,6 +67,7 @@ while True:
     else:
         print("Enter a valid choice")
         
+t=int(input(""))
 """
 
                 
@@ -94,4 +88,9 @@ while True:
 4
 9
 
+"""
+"""
+Write a Python program to store roll numbers of student array who attended training
+program in sorted order. Write function for searching whether particular student
+attended training program or not, using Binary search and Fibonacci search
 """

@@ -1,14 +1,9 @@
-"""
-Write a Python program to store roll numbers of student in array who attended training program in random order. Write function for searching whether particular student attended training program or not, using Linear search and Sentinel search.
-"""
-
 def linersearch(lst,elmt,n):
 	for i in range(n):
 		if lst[i]==elmt:
 			return i
 	return -1
 
-# C / C++ Style code ie can not append in list
 def sentinelsearch(lst,elmt,n):
 	last = lst[n-1]
 	lst[n-1] = elmt
@@ -17,18 +12,6 @@ def sentinelsearch(lst,elmt,n):
 		i+=1
 		
 	if i < n-1 or elmt == last:
-		return i
-	else:
-		return -1
-
-# python code ie can append in list
-def sentinelsearch2(lst,elmt,n):
-	lst.append(elmt)
-	i=0
-	while (lst[i] != elmt):
-		i+=1
-		
-	if i < n:
 		return i
 	else:
 		return -1
@@ -57,7 +40,7 @@ while True:
 			
 	elif choice==2:
 		elmt = int(input("Enter roll number to search:"))
-		res = sentinelsearch2(a,elmt,n)
+		res = sentinelsearch(a,elmt,n)
 		if res == -1:
 			print("Student has not attended training.")
 		else:
@@ -67,7 +50,9 @@ while True:
 		break
 	else:
 		print("Enter a valid choice")
-		
+
+t=int(input(""))
+	
 """
 10
 1
@@ -81,5 +66,35 @@ while True:
 6
 3
 
+
+
+# C / C++ Style code ie can not append in list
+def sentinelsearch1(lst,elmt,n):
+	last = lst[n-1]
+	lst[n-1] = elmt
+	i=0
+	while (lst[i] != elmt):
+		i+=1
+		
+	if i < n-1 or elmt == last:
+		return i
+	else:
+		return -1
+
+# python code ie can append in list
+def sentinelsearch2(lst,elmt,n):
+	lst.append(elmt)
+	i=0
+	while (lst[i] != elmt):
+		i+=1
+		
+	if i < n:
+		return i
+	else:
+		return -1
+
 """
 	
+"""
+Write a Python program to store roll numbers of student in array who attended training program in random order. Write function for searching whether particular student attended training program or not, using Linear search and Sentinel search.
+"""
