@@ -48,7 +48,7 @@ arr = enter_array()
 while True:
     print("-"*30)
     print("MENU".center(30))
-    print("1. Enter array\n2. Display Array\n3. Use Binary Search\n4. Use Febonacci Search\n5. Exit")
+    print("1. Enter array\n2. Display Array\n3. Use Binary Search\n4. Use Fibonacci Search\n5. Exit")
     choice = int(input("Enter your choice:"))
     if choice==1:
         arr = enter_array()
@@ -82,7 +82,6 @@ while True:
 t=input("")
 
 """ 
-1
 10
 1
 4
@@ -90,12 +89,11 @@ t=input("")
 9
 7
 5
-11
+2
 10
 8
 3
 4
-9
 
 """
 """
