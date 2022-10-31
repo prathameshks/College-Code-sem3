@@ -276,13 +276,14 @@ void load_data(int *current, student *s_list[], information *s_info[]) {
     string line;
     string all_data[10] = {""};
     int last, line_index;
+    int err_cnt = 0;
     while (data_file.eof() == 0) {
         getline(data_file, line);
         if (line == "") {
             // skip empty line
             continue;
         }
-
+		try{
         last = 0;
         line_index = 0;
         for (int i = 0; i < line.size(); i++) {
@@ -298,9 +299,14 @@ void load_data(int *current, student *s_list[], information *s_info[]) {
         s_info[*current] = new information(all_data[0], all_data[4], all_data[5], all_data[6], all_data[8], all_data[7]);
         s_list[*current] = new student(stoi(all_data[1]), all_data[2], all_data[3][0], all_data[9]);
         (*current)++;
+        }
+        catch(...){
+        err_cnt++;
+        }
     }
     data_file.close();
-    cout << "Imported " << *current << " records." << endl;
+    cout << "Imported " << *current << " records;"<<err_cnt<<" Import Error"<<endl;
+        
 }
 
 int main() {
