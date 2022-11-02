@@ -68,6 +68,90 @@ public:
 
 int main()
 {
+    stack<char> list;
+
+    string exp;
+    char lastpara;
+    cout << "Enter the expression:";
+    cin >> exp;
+    int flag = 0;
+    for (int i = 0; i < exp.size(); i++)
+    {
+        if (flag==1)
+        {
+            break;
+        }
+        
+        switch (exp[i])
+        {
+        case '{':
+            list.push('}');
+            break;
+
+        case '[':
+            list.push(']');
+            break;
+
+        case '(':
+            list.push(')');
+            break;
+
+        case '}':
+            lastpara = list.pop();
+            if (exp[i] == lastpara)
+            {
+                flag = 0;
+            }
+            else
+            {
+                flag = 1;
+                list.push(lastpara);
+            }
+            break;
+
+        case ']':
+            lastpara = list.pop();
+            if (exp[i] == lastpara)
+            {
+                flag = 0;
+            }
+            else
+            {
+                flag = 1;
+                list.push(lastpara);
+            }
+            break;
+
+        case ')':
+            lastpara = list.pop();
+            if (exp[i] == lastpara)
+            {
+                flag = 0;
+            }
+            else
+            {
+                flag = 1;
+                list.push(lastpara);
+            }
+            break;
+
+        default:
+            break;
+        }
+    }
+    if (flag)
+    {
+        cout << "Expression is not valid " << endl;
+    }
+    else
+    {
+        cout << "Expression is valid " << endl;
+    }
+
+    return 0;
+}
+
+/*
     stack<int> mylist;
     bool loopcont = true;
     int ch;
@@ -112,5 +196,4 @@ int main()
         }
     }
 
-    return 0;
-}
+*/
