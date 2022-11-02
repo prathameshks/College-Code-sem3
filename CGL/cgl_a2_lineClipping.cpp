@@ -168,6 +168,7 @@ bool logicalAnd(string s1, string s2)
 bool clipline(Line l, Window w)
 {
     // set code to endpoint if not set already
+    string clipCode;
     if (l.code1 == "" or l.code2 == "")
     {
         l.setcode(w);
@@ -183,16 +184,19 @@ bool clipline(Line l, Window w)
     {
         return false;
     }
-    //if one point is inside and one is outside
+    // if one point is inside and one is outside
     if (l.code1 == "0000" or l.code2 == "0000")
     {
-        if (l.code1 == "0000")
+        clipCode = (l.code1 == "0000") ? l.code2 : clipCode = l.code1;
+        for (int code = 0; code < 4; code++)
         {
+            if (clipCode[code]=='1')
+            {
+                
+            }
+            
         }
-        else
-        {
-        }
-
+        
         return true;
     }
 }
