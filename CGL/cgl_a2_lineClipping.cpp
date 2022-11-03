@@ -1,7 +1,7 @@
 #include <iostream>
 #include <math.h>
 #include <graphics.h>
-#include<string>
+#include <string>
 using namespace std;
 
 // basic point with x and y
@@ -97,6 +97,24 @@ public:
     }
 };
 
+string setpntcode(Point p1, Window w)
+{
+    // top bottom right left
+    string tmpcode = "0000";
+
+    // for p1
+    if (p1.x < w.p1.x)
+        tmpcode[3] = '1';
+    if (p1.x > w.p2.x)
+        tmpcode[2] = '1';
+    if (p1.y < w.p1.y)
+        tmpcode[0] = '1';
+    if (p1.y > w.p4.y)
+        tmpcode[1] = '1';
+
+    return tmpcode;
+}
+
 // line class with point p1 and p2
 class Line
 {
@@ -124,84 +142,17 @@ public:
         drawline(p1, p2, col, Delay);
     }
 
-    Point intersection(Point wp1, Point wp2)
-    {
-        Point res;
-        res.x = ((wp1.x * wp2.y - wp1.y * wp2.x) * (p1.x - p2.x)) - ((p1.x * p2.y - p1.y * p2.x) * (wp1.x - wp2.x)) / ((wp1.x - wp2.x) * (p1.y - p2.y) - (wp1.y - wp2.y) * (p1.x - p2.x));
-        res.y = ((wp1.x * wp2.y - wp1.y * wp2.x) * (p1.y - p2.y)) - ((p1.x * p2.y - p1.y * p2.x) * (wp1.y - wp2.y)) / ((wp1.x - wp2.x) * (p1.y - p2.y) - (wp1.y - wp2.y) * (p1.x - p2.x));
-        // if (res.x < wp1.x or res.x > wp2.x)
-        // {
-        //     res.x = -1;
-        // }
-        // if (res.y < wp1.y or res.y > wp2.y)
-        // {
-        //     res.y = -1;
-        // }
-        return res;
-    }
-
     void setcode(Window w)
     {
         // top bottom right left
-        string tmpcode1 = "0000", tmpcode2 = "0000";
-
-        // for p1
-        if (p1.x < w.p1.x)
-            tmpcode1[3] = '1';
-        if (p1.x > w.p2.x)
-            tmpcode1[2] = '1';
-        if (p1.y < w.p1.y)
-            tmpcode1[0] = '1';
-        if (p1.y > w.p4.y)
-            tmpcode1[1] = '1';
-
-        // for p2
-        if (p2.x < w.p1.x)
-            tmpcode2[3] = '1';
-        if (p2.x > w.p2.x)
-            tmpcode2[2] = '1';
-        if (p2.y < w.p1.y)
-            tmpcode2[0] = '1';
-        if (p2.y > w.p4.y)
-            tmpcode2[1] = '1';
-
-        code1 = tmpcode1;
-        code2 = tmpcode2;
+        code1 = setpntcode(p1, w);
+        code2 = setpntcode(p2, w);
     }
 };
 
-bool logicalAnd(string s1, string s2)
-{
-    for (int i = 0; i < 4; i++)
-    {
-        if (s1[i] == '1' and s2[i] == '1')
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
-string setpntcode(Point p1, Window w)
-{
-    // top bottom right left
-    string tmpcode = "0000";
-
-    // for p1
-    if (p1.x < w.p1.x)
-        tmpcode[3] = '1';
-    if (p1.x > w.p2.x)
-        tmpcode[2] = '1';
-    if (p1.y < w.p1.y)
-        tmpcode[0] = '1';
-    if (p1.y > w.p4.y)
-        tmpcode[1] = '1';
-
-    return tmpcode;
-}
 // Implementing Cohen-Sutherland algorithm
 // Clipping a line from P1 = (x2, y2) to P2 = (x2, y2)
-bool cohenSutherlandClip(Line *l, Window w,Line * res)
+bool cohenSutherlandClip(Line *l, Window w, Line *res)
 {
     // Compute region codes for P1, P2
     l->setcode(w);
@@ -231,14 +182,12 @@ bool cohenSutherlandClip(Line *l, Window w,Line * res)
         }
         else if (code1 & code2)
         {
-            // If both endpoints are outside rectangle,
-            // in same region
+            // If both endpoints are outside rectangle, in same region
             break;
         }
         else
         {
-            // Some segment of line lies within the
-            // rectangle
+            // Some segment of line lies within the rectangle
             int code_out;
             double x, y;
 
@@ -286,7 +235,7 @@ bool cohenSutherlandClip(Line *l, Window w,Line * res)
                 y1 = y;
                 Point p1(x1, y1);
 
-                code1 = stoi(setpntcode(p1,w), 0, 2);
+                code1 = stoi(setpntcode(p1, w), 0, 2);
             }
             else
             {
@@ -294,215 +243,24 @@ bool cohenSutherlandClip(Line *l, Window w,Line * res)
                 y2 = y;
                 Point p1(x2, y2);
 
-                code2 = stoi(setpntcode(p1,w), 0, 2);
+                code2 = stoi(setpntcode(p1, w), 0, 2);
             }
         }
     }
     if (accept)
     {
-        //set new line points
+        // set new line points
         l->p1.x = x1;
         l->p1.y = y1;
         l->p2.y = y2;
         l->p2.x = x2;
         return true;
     }
-    else{
-        // cout << "Line rejected" << endl;
-        return false;
-        }
-}
-
-bool clipline(Line l, Window w)
-{
-    // set code to endpoint if not set already
-    string clipCode;
-    Point res;
-    bool first, isset = false;
-    // if (l.code1 == "" or l.code2 == "")
-    // {
-    // }
-    l.setcode(w);
-    // if both end are inside window then no need to clip
-    if (l.code1 == "0000" and l.code2 == "0000")
-    {
-        return true;
-    }
-
-    // if and of codes is non zero then completely outside
-    if (logicalAnd(l.code1, l.code2))
-    {
-        return false;
-    }
-    // if one point is inside and one is outside
-    if (l.code1 == "0000" or l.code2 == "0000")
-    {
-        /*debug*/ cout << "Reached Start " << endl;
-        clipCode = (l.code1 == "0000") ? l.code2 : l.code1;
-        first = (l.code1 == "0000") ? false : true;
-        if (clipCode[0] == '1' and not isset)
-        {
-            // top
-            res = l.intersection(w.p1, w.p2);
-            if (res.x != -1 and res.y != -1)
-            {
-                isset = true;
-                if (first)
-                    l.p1 = res;
-                else
-                    l.p2 = res;
-            }
-        }
-        if (clipCode[1] == '1' and not isset)
-        {
-            // bottom
-            res = l.intersection(w.p4, w.p3);
-            if (res.x != -1 and res.y != -1)
-            {
-                isset = true;
-                if (first)
-                    l.p1 = res;
-                else
-                    l.p2 = res;
-            }
-        }
-        if (clipCode[2] == '1' and not isset)
-        {
-            // right
-            res = l.intersection(w.p2, w.p3);
-            if (res.x != -1 and res.y != -1)
-            {
-                isset = true;
-                if (first)
-                    l.p1 = res;
-                else
-                    l.p2 = res;
-            }
-        }
-        if (clipCode[3] == '1' and not isset)
-        {
-            /*debug*/ cout << "Reached Left " << endl;
-            // left
-            res = l.intersection(w.p1, w.p4);
-            cout << res.x << res.y << endl;
-            // if (res.x < wp1.x or res.x > wp2.x)
-        // {
-        //     res.x = -1;
-        // }
-        // if (res.y < wp1.y or res.y > wp2.y)
-        // {
-        //     res.y = -1;
-        // }
-            if ((res.x != -1) and (res.y != -1))
-            {
-                /*debug*/ cout << "Reached assign 1 " << endl;
-
-                isset = true;
-                if (first)
-                    l.p1 = res;
-                else
-                    l.p2 = res;
-
-                cout << res.x << res.y << endl;
-            }
-        }
-        return true;
-    }
     else
     {
-        /*debug*/ cout << "Reached Start " << endl;
-        // for 1st point
-        isset = false;
-        clipCode = l.code1;
-        if (clipCode[0] == '1' and not isset)
-        {
-            // top
-            res = l.intersection(w.p1, w.p2);
-            if (res.x != -1 and res.y != -1)
-            {
-                isset = true;
-                l.p1 = res;
-            }
-        }
-        if (clipCode[1] == '1' and not isset)
-        {
-            // bottom
-            res = l.intersection(w.p4, w.p3);
-            if (res.x != -1 and res.y != -1)
-            {
-                isset = true;
-                l.p1 = res;
-            }
-        }
-        if (clipCode[2] == '1' and not isset)
-        {
-            // right
-            res = l.intersection(w.p2, w.p3);
-            if (res.x != -1 and res.y != -1)
-            {
-                isset = true;
-                l.p1 = res;
-            }
-        }
-        if (clipCode[3] == '1' and not isset)
-        {
-            // left
-            res = l.intersection(w.p1, w.p4);
-            if (res.x != -1 and res.y != -1)
-            {
-                isset = true;
-                l.p1 = res;
-            }
-        }
-
-        // for 2nd point
-        isset = false;
-        clipCode = l.code2;
-        if (clipCode[0] == '1' and not isset)
-        {
-            // top
-            res = l.intersection(w.p1, w.p2);
-            if (res.x != -1 and res.y != -1)
-            {
-                isset = true;
-                l.p2 = res;
-            }
-        }
-        if (clipCode[1] == '1' and not isset)
-        {
-            // bottom
-            res = l.intersection(w.p4, w.p3);
-            if (res.x != -1 and res.y != -1)
-            {
-                isset = true;
-                l.p2 = res;
-            }
-        }
-        if (clipCode[2] == '1' and not isset)
-        {
-            // right
-            res = l.intersection(w.p2, w.p3);
-            if (res.x != -1 and res.y != -1)
-            {
-                isset = true;
-                l.p2 = res;
-            }
-        }
-        if (clipCode[3] == '1' and not isset)
-        {
-            // left
-            res = l.intersection(w.p1, w.p4);
-            if (res.x != -1 and res.y != -1)
-            {
-                isset = true;
-                l.p2 = res;
-            }
-        }
-        l.draw(BLUE);
-        return true;
+        // cout << "Line rejected" << endl;
+        return false;
     }
-    cout << "Can Not clip" << endl;
-    return false;
 }
 
 // Driver code
@@ -510,30 +268,22 @@ int main()
 {
     int gd = DETECT, gm;
     initgraph(&gd, &gm, NULL); // initialize graph
+    Line linearr[10];
 
     Point p1(100, 100), p2(300, 100), p3(300, 200), p4(100, 200);
     Window w1(p1, p2, p3, p4);
     w1.draw();
-    // w1.Display_coords();
-    // Window w2(p1, p3);
-    // w2.draw(YELLOW, 10);
-    // w2.Display_coords();
-    Line l1(50, 150, 150, 170);
-    Line res(0,0,0,0);
-    l1.draw(GREEN, 0);
-    // l1.displaycode();
-    // l1.setcode(w1);
-    // l1.displaycode();
-    // delay(2000);
-    if (cohenSutherlandClip(&l1, w1,&res))
+
+    linearr[0] = Line(110, 150, 110, 190);
+    linearr[1] = Line(150, 160, 90, 80);
+    linearr[2] = Line(100, 220, 90, 80);
+
+    for (int i = 0; i < 3; i++)
     {
-        l1.draw(RED);
+
+        cohenSutherlandClip(&linearr[0], w1);
     }
-    else
-    {
-        l1.draw(BLUE);
-    }
-    
+`   
     getch();
     closegraph();
     return 0;
