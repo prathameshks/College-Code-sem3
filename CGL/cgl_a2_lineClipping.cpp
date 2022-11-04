@@ -4,20 +4,22 @@
 #include <string>
 using namespace std;
 
+// Defining region codes
+const int INSIDE = 0; // 0000
+const int LEFT = 1;   // 0001
+const int RIGHT = 2;  // 0010
+const int BOTTOM = 4; // 0100
+const int TOP = 8;    // 1000
+
 // basic point with x and y
 class Point
 {
 public:
     int x, y;
-    Point(int a, int b)
+    Point(int a = 0, int b = 0)
     {
         x = a;
         y = b;
-    }
-    Point()
-    {
-        x = 0;
-        y = 0;
     }
 };
 
@@ -87,14 +89,6 @@ public:
         drawline(p3, p4, col, Delay);
         drawline(p4, p1, col, Delay);
     }
-
-    void Display_coords()
-    {
-        cout << p1.x << " " << p1.y << endl;
-        cout << p2.x << " " << p2.y << endl;
-        cout << p3.x << " " << p3.y << endl;
-        cout << p4.x << " " << p4.y << endl;
-    }
 };
 
 string setpntcode(Point p1, Window w)
@@ -115,6 +109,17 @@ string setpntcode(Point p1, Window w)
     return tmpcode;
 }
 
+bool stringAND(string s1,string s2,int len=4){
+    for (int i = 0; i < len; i++)
+    {
+        if ((s1[i]=='1') and (s2[i]=='1'))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 // line class with point p1 and p2
 class Line
 {
@@ -132,9 +137,8 @@ public:
         p1 = Point(x1, y1);
         p2 = Point(x2, y2);
     }
-    void displaycode()
+    Line()
     {
-        cout << code1 << " & " << code2 << endl;
     }
 
     void draw(_color col = RED, int Delay = 1)
@@ -152,35 +156,31 @@ public:
 
 // Implementing Cohen-Sutherland algorithm
 // Clipping a line from P1 = (x2, y2) to P2 = (x2, y2)
-bool cohenSutherlandClip(Line *l, Window w, Line *res)
+bool clipLine(Line *l, Window w)
 {
     // Compute region codes for P1, P2
     l->setcode(w);
-    int code1 = stoi(l->code1, 0, 2);
-    int code2 = stoi(l->code2, 0, 2);
+    // int code1 = stoi(l->code1, 0, 2);
+    // int code2 = stoi(l->code2, 0, 2);
+    string code1 = l->code1;
+    string code2 = l->code2;
     double x1 = l->p1.x;
     double y1 = l->p1.y;
     double x2 = l->p2.x;
     double y2 = l->p2.y;
-    // Defining region codes
-    const int INSIDE = 0; // 0000
-    const int LEFT = 1;   // 0001
-    const int RIGHT = 2;  // 0010
-    const int BOTTOM = 4; // 0100
-    const int TOP = 8;    // 1000
 
     // Initialize line as outside the rectangular window
     bool accept = false;
 
     while (true)
     {
-        if ((code1 == 0) && (code2 == 0))
+        if ((code1 == "0000") && (code2 == "0000"))
         {
             // If both endpoints lie within rectangle
             accept = true;
             break;
         }
-        else if (code1 & code2)
+        else if (stringAND(code1 , code2))
         {
             // If both endpoints are outside rectangle, in same region
             break;
@@ -188,38 +188,44 @@ bool cohenSutherlandClip(Line *l, Window w, Line *res)
         else
         {
             // Some segment of line lies within the rectangle
-            int code_out;
+            // int code_out;
+            string out_code;
             double x, y;
 
-            // At least one endpoint is outside the
-            // rectangle, pick it.
-            if (code1 != 0)
-                code_out = code1;
+            // At least one endpoint is outside the rectangle, pick it.
+            if (code1 != "0000")
+                out_code = l->code1;
+                // code_out = code1;
             else
-                code_out = code2;
+                out_code = l->code2;
+                // code_out = code2;
 
             // Find intersection point;
             // using formulas y = y1 + slope * (x - x1),
             // x = x1 + (1 / slope) * (y - y1)
-            if (code_out & TOP)
+            // if (code_out & TOP)
+            if(out_code[0] == '1')
             {
                 // point is above the clip rectangle
                 x = x1 + (x2 - x1) * (w.p3.y - y1) / (y2 - y1);
                 y = w.p3.y;
             }
-            else if (code_out & BOTTOM)
+            // if (code_out & BOTTOM)
+            else if(out_code[1] == '1')
             {
                 // point is below the rectangle
                 x = x1 + (x2 - x1) * (w.p1.y - y1) / (y2 - y1);
                 y = w.p1.y;
             }
-            else if (code_out & RIGHT)
+            // if (code_out & RIGHT)
+            else if(out_code[2] == '1')
             {
                 // point is to the right of rectangle
                 y = y1 + (y2 - y1) * (w.p3.x - x1) / (x2 - x1);
                 x = w.p3.x;
             }
-            else if (code_out & LEFT)
+            // if (code_out & LEFT)
+            else if(out_code[3] == '1')
             {
                 // point is to the left of rectangle
                 y = y1 + (y2 - y1) * (w.p1.x - x1) / (x2 - x1);
@@ -227,23 +233,21 @@ bool cohenSutherlandClip(Line *l, Window w, Line *res)
             }
 
             // Now intersection point x, y is found
-            // We replace point outside rectangle
-            // by intersection point
-            if (code_out == code1)
+            if (out_code == code1)
             {
                 x1 = x;
                 y1 = y;
                 Point p1(x1, y1);
-
-                code1 = stoi(setpntcode(p1, w), 0, 2);
+                // code1 = stoi(setpntcode(p1, w), 0, 2);
+                code1 = setpntcode(p1, w);
             }
             else
             {
                 x2 = x;
                 y2 = y;
                 Point p1(x2, y2);
-
-                code2 = stoi(setpntcode(p1, w), 0, 2);
+                // code2 = stoi(setpntcode(p1, w), 0, 2);
+                code2 = setpntcode(p1, w);
             }
         }
     }
@@ -258,7 +262,6 @@ bool cohenSutherlandClip(Line *l, Window w, Line *res)
     }
     else
     {
-        // cout << "Line rejected" << endl;
         return false;
     }
 }
@@ -269,22 +272,53 @@ int main()
     int gd = DETECT, gm;
     initgraph(&gd, &gm, NULL); // initialize graph
     Line linearr[10];
+    Point p1,p3;
+    int n;
+    delay(1000);
+    
+    cout<<"Enter starting coordinates of window(p1):";
+    cin>>p1.x>>p1.y;
+    cout<<"Enter Ending coordinates of window(p3):";
+    cin>>p3.x>>p3.y;
 
-    Point p1(100, 100), p2(300, 100), p3(300, 200), p4(100, 200);
-    Window w1(p1, p2, p3, p4);
-    w1.draw();
+    cout<<"Enter number of lines:";
+    cin>>n;
 
-    linearr[0] = Line(110, 150, 110, 190);
-    linearr[1] = Line(150, 160, 90, 80);
-    linearr[2] = Line(100, 220, 90, 80);
+    for (int i = 0; i < n; i++){
+        cout<<"Enter line (x1,y1,x2,y2)"<<i+1<<" :";
+        cin>>linearr[i].p1.x>>linearr[i].p1.y>>linearr[i].p2.x>>linearr[i].p2.y;
+    }
+
+    Window w1(p1, p3);
+    w1.draw(YELLOW);
+
+    for (int i = 0; i < 3; i++)
+        linearr[i].draw(RED);
+
+    cout<<"Cliping in 3 seconds"<<endl;
+    delay(3000);
+    // cleardevice();
+    w1.draw(YELLOW);
 
     for (int i = 0; i < 3; i++)
     {
-
-        cohenSutherlandClip(&linearr[0], w1);
+        if (clipLine(&linearr[i], w1))
+        {
+            linearr[i].draw(GREEN);
+        }
     }
-`   
+
+    cout<<"End";
     getch();
     closegraph();
     return 0;
 }
+
+/*
+100 100 300 300
+3
+50 50 150 120
+120 160 350 250
+150 150 200 150
+
+*/
