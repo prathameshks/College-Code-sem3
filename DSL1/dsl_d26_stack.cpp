@@ -2,154 +2,82 @@
 (),{},[]. Write C++ program using stack to check whether given expression is well
 parenthesized or not*/
 #include <iostream>
-#define max 5
+#define max 15
 using namespace std;
 
 template <class T>
-class stack
-{
+class stack {
     T list[max];
 
-public:
+   public:
     int top;
-    stack()
-    {
+    stack() {
         top = -1;
     }
-    bool isempty()
-    {
+    bool isempty() {
         return (top <= -1) ? true : false;
     }
-    bool isfull()
-    {
+    bool isfull() {
         return (top == max - 1) ? true : false;
-        // if (top == max - 1)
-        //     return true;
-        // else
-        //     return false;
     }
-    void push(T elmt)
-    {
-        if (not isfull())
-        {
+    void push(T elmt) {
+        if (not isfull()) {
             top++;
             list[top] = elmt;
         }
     }
-    T pop()
-    {
-        if (not isempty())
-        {
+    T pop() {
+        if (not isempty()) {
             top--;
             return list[top + 1];
         }
-        else
-        {
-            return NULL;
-        }
     }
-    void show()
-    {
+    void show() {
         if (isempty())
-        {
             cout << "Empty";
-        }
         else
-        {
             for (int i = 0; i <= top; i++)
-            {
                 cout << list[i] << " ";
-            }
-        }
 
         cout << endl;
     }
 };
 
-int main()
-{
+int main() {
     stack<char> list;
 
     string exp;
     char lastpara;
+    cout << "* Maximun Parinthesis Allowed are 15 *" << endl;
     cout << "Enter the expression:";
     cin >> exp;
-    int flag = 0;
-    for (int i = 0; i < exp.size(); i++)
-    {
-        if (flag==1)
-        {
-            break;
-        }
-        
-        switch (exp[i])
-        {
-        case '{':
+    bool flag = false;
+
+    // cout<<exp.size()<<endl;
+    for (int i = 0; i < exp.size(); i++) {
+        if (exp[i] == '{') {
             list.push('}');
-            break;
-
-        case '[':
+        } else if (exp[i] == '[') {
             list.push(']');
-            break;
-
-        case '(':
+        } else if (exp[i] == '(') {
             list.push(')');
-            break;
-
-        case '}':
+        } else if ((exp[i] == '}') or (exp[i] == ']') or (exp[i] == ')')) {
             lastpara = list.pop();
-            if (exp[i] == lastpara)
-            {
-                flag = 0;
+            if (exp[i] != lastpara) {
+                flag = true;
+                break;
             }
-            else
-            {
-                flag = 1;
-                list.push(lastpara);
-            }
-            break;
-
-        case ']':
-            lastpara = list.pop();
-            if (exp[i] == lastpara)
-            {
-                flag = 0;
-            }
-            else
-            {
-                flag = 1;
-                list.push(lastpara);
-            }
-            break;
-
-        case ')':
-            lastpara = list.pop();
-            if (exp[i] == lastpara)
-            {
-                flag = 0;
-            }
-            else
-            {
-                flag = 1;
-                list.push(lastpara);
-            }
-            break;
-
-        default:
-            break;
         }
     }
-    if (flag)
-    {
+
+    if (flag or (not list.isempty())) {
         cout << "Expression is not valid " << endl;
-    }
-    else
-    {
+    } else {
         cout << "Expression is valid " << endl;
     }
-
     return 0;
 }
+
 
 /*
     stack<int> mylist;
