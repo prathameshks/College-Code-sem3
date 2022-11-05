@@ -11,6 +11,12 @@ const int RIGHT = 2;  // 0010
 const int BOTTOM = 4; // 0100
 const int TOP = 8;    // 1000
 
+// Window coordinates of two diagonal points
+int x_max;
+int y_max;
+int x_min;
+int y_min;
+
 // DDA Line algorithm to draw line
 void drawline(int x1, int y1, int x2, int y2, _color col = RED, int Delay = 1)
 {
@@ -67,11 +73,7 @@ public:
     }
 };
 
-int x_max;
-int y_max;
-int x_min;
-int y_min;
-
+// get code of point wrt window
 int generateCode(double x, double y)
 {
     int code = INSIDE; // intially initializing as being inside
@@ -86,93 +88,91 @@ int generateCode(double x, double y)
     return code;
 }
 
-void cohenSutherland(double x1, double y1, double x2, double y2)
+bool cohenSutherland(Line *l)
 {
-    int code1 = generateCode(x1, y1); // Compute region codes for P1.
-    int code2 = generateCode(x2, y2); // Compute region codes for P2.
-    bool accept = false;              // Initialize line as outside the rectangular window.
+    int code1 = generateCode(l->x1, l->y1); // Compute region codes for P1.
+    int code2 = generateCode(l->x2, l->y2); // Compute region codes for P2.
+    bool accept = false;                    // Initialize line as outside the rectangular window.
     while (true)
     {
         if ((code1 == 0) && (code2 == 0))
         {
-            // If both endpoints lie within rectangle.
+            // both points inside
             accept = true;
             break;
         }
         else if (code1 & code2)
         {
-            // If both endpoints are outside rectangle,in same region.
+            // both points outside
             break;
         }
         else
         {
-            // Some segment of line lies within the rectangle.
+            // partialy inside
             int code_out;
             double x, y;
-            // At least one endpoint lies outside the rectangle, pick it.
+            // outside point selection
             if (code1 != 0)
                 code_out = code1;
             else
                 code_out = code2;
-            /*
-             * Find intersection point by using formulae :
-             y = y1 + slope * (x - x1)
-             x = x1 + (1 / slope) * (y - y1)
-             */
+
+            // Find intersection point by line slope form and 2 point form
+            double slope = (l->y2 - l->y1) / (l->x2 - l->x1);
+
             if (code_out & TOP)
             {
-                // point is above the clip rectangle
-                x = x1 + (x2 - x1) * (y_max - y1) / (y2 - y1);
+                // intersecting top
+                x = l->x1 + ((y_max - l->y1) / slope);
                 y = y_max;
             }
             else if (code_out & BOTTOM)
             {
-                // point is below the rectangle
-                x = x1 + (x2 - x1) * (y_min - y1) / (y2 - y1);
+                // intersecting bottom
+                x = l->x1 + ((y_min - l->y1) / slope);
                 y = y_min;
             }
             else if (code_out & RIGHT)
             {
-                // point is to the right of rectangle
-                y = y1 + (y2 - y1) * (x_max - x1) / (x2 - x1);
+                // intersecting right
+                y = l->y1 + (slope * (x_max - l->x1));
                 x = x_max;
             }
             else if (code_out & LEFT)
             {
-                // point is to the left of rectangle
-                y = y1 + (y2 - y1) * (x_min - x1) / (x2 - x1);
+                // intersecting left
+                y = l->y1 + (slope * (x_min - l->x1));
                 x = x_min;
             }
-            // Intersection point x,y is found.
-            // Replace point outside rectangle by intersection point.
+
+            // change value of line points
             if (code_out == code1)
             {
-                x1 = x;
-                y1 = y;
-                code1 = generateCode(x1, y1);
+                l->x1 = x;
+                l->y1 = y;
+                code1 = generateCode(l->x1, l->y1);
             }
             else
             {
-                x2 = x;
-                y2 = y;
-                code2 = generateCode(x2, y2);
+                l->x2 = x;
+                l->y2 = y;
+                code2 = generateCode(l->x2, l->y2);
             }
         }
     }
-    if (accept)
-    {
-        std::cout << "Line accepted from "
-                  << "(" << x1 << ", "
-                  << y1 << ")"
-                  << " to "
-                  << "(" << x2 << ", " << y2 << ")" << std::endl;
 
-                  drawline(x1,y1,x2,y2,GREEN);
-    }
-    else
-        std::cout << "Line rejected" << std::endl;
+    return accept;
 }
-// Driver code
+
+// draw window
+void drawWindow(_color col = RED, int Delay = 1)
+{
+    drawline(x_min, y_min, x_max, y_min, col, Delay);
+    drawline(x_max, y_min, x_max, y_max, col, Delay);
+    drawline(x_max, y_max, x_min, y_max, col, Delay);
+    drawline(x_min, y_max, x_min, y_min, col, Delay);
+}
+
 int main()
 {
     int gd = DETECT, gm;
@@ -196,24 +196,25 @@ int main()
     }
 
     // draw window
-    drawline(x_min, y_min, x_max, y_min);
-    drawline(x_max, y_min, x_max, y_max);
-    drawline(x_max, y_max, x_min, y_max);
-    drawline(x_min, y_max, x_min, y_min);
+    drawWindow(YELLOW);
 
     for (int i = 0; i < n; i++)
         linearr[i].draw(RED);
 
     cout << "Cliping in 3 seconds" << endl;
     delay(3000);
-    // cleardevice();
+    cleardevice();
+
+    // draw window
+    drawWindow(YELLOW, 0);
 
     for (int i = 0; i < n; i++)
     {
-        cohenSutherland(linearr[i].x1, linearr[i].y1, linearr[i].x2, linearr[i].y2);
+        if (cohenSutherland(&linearr[i]))
+            linearr[i].draw(GREEN);
     }
 
-    cout << "End";
+    cout << "Clipped Lines" << endl;
     getch();
     closegraph();
     return 0;
@@ -223,94 +224,8 @@ int main()
 100 100 300 300
 4
 50 50 150 120
-50 150 150 120
+50 50 50 120
 120 160 350 250
 150 150 200 150
 
 */
-
-// void cohenSutherland2(int x1, int y1, int x2, int y2, Line l)
-// {
-//     int code1 = generateCode(l.x1, l.y1); // Compute region codes for P1.
-//     int code2 = generateCode(l.x2, l.y2); // Compute region codes for P2.
-//     bool accept = false;                  // Initialize line as outside the rectangular window.
-//     while (true)
-//     {
-//         if ((code1 == 0) && (code2 == 0))
-//         {
-//             // If both endpoints lie within rectangle.
-//             accept = true;
-//             break;
-//         }
-//         else if (code1 & code2)
-//         {
-//             // If both endpoints are outside rectangle,in same region.
-//             break;
-//         }
-//         else
-//         {
-//             // Some segment of line lies within the rectangle.
-//             int code_out;
-//             double x, y;
-//             // At least one endpoint lies outside the rectangle, pick it.
-//             if (code1 != 0)
-//                 code_out = code1;
-//             else
-//                 code_out = code2;
-//             /*
-//              * Find intersection point by using formulae :
-//              y = l.y1 + slope * (x - l.x1)
-//              x = l.x1 + (1 / slope) * (y - l.y1)
-//              */
-//             if (code_out & TOP)
-//             {
-//                 // point is above the clip rectangle
-//                 x = l.x1 + (l.x2 - l.x1) * (y_max - l.y1) / (l.y2 - l.y1);
-//                 y = y_max;
-//             }
-//             else if (code_out & BOTTOM)
-//             {
-//                 // point is below the rectangle
-//                 x = l.x1 + (l.x2 - l.x1) * (y_min - l.y1) / (l.y2 - l.y1);
-//                 y = y_min;
-//             }
-//             else if (code_out & RIGHT)
-//             {
-//                 // point is to the right of rectangle
-//                 y = l.y1 + (l.y2 - l.y1) * (x_max - l.x1) / (l.x2 - l.x1);
-//                 x = x_max;
-//             }
-//             else if (code_out & LEFT)
-//             {
-//                 // point is to the left of rectangle
-//                 y = l.y1 + (l.y2 - l.y1) * (x_min - l.x1) / (l.x2 - l.x1);
-//                 x = x_min;
-//             }
-//             // Intersection point x,y is found.
-//             // Replace point outside rectangle by intersection point.
-//             if (code_out == code1)
-//             {
-//                 l.x1 = x;
-//                 l.y1 = y;
-//                 code1 = generateCode(l.x1, l.y1);
-//             }
-//             else
-//             {
-//                 l.x2 = x;
-//                 l.y2 = y;
-//                 code2 = generateCode(l.x2, l.y2);
-//             }
-//         }
-//     }
-//     if (accept)
-//     {
-//         std::cout << "Line accepted from "
-//                   << "(" << l.x1 << ", "
-//                   << l.y1 << ")"
-//                   << " to "
-//                   << "(" << l.x2 << ", " << l.y2 << ")" << std::endl;
-//         Line(l.x1, l.x2, l.y1, l.y2).draw(GREEN);
-//     }
-//     else
-//         std::cout << "Line rejected" << std::endl;
-// }
