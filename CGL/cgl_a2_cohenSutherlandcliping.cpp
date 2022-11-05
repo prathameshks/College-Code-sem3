@@ -88,7 +88,7 @@ int generateCode(double x, double y)
     return code;
 }
 
-bool cohenSutherland(Line *l)
+bool clipLine(Line *l)
 {
     int code1 = generateCode(l->x1, l->y1); // Compute region codes for P1.
     int code2 = generateCode(l->x2, l->y2); // Compute region codes for P2.
@@ -210,7 +210,7 @@ int main()
 
     for (int i = 0; i < n; i++)
     {
-        if (cohenSutherland(&linearr[i]))
+        if (clipLine(&linearr[i]))
             linearr[i].draw(GREEN);
     }
 
