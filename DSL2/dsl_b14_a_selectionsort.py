@@ -18,10 +18,13 @@ def selection_sort(arr):
 
 
 arr = []
-n = int(input("Enter Number of Elements:"))
+n = int(input("Enter Number of Students:"))
 for i in range(n):
-    arr.append(float(input("Enter Element:")))
+    arr.append(float(input(f"Enter Percentage of Student{i+1}:")))
 
-print("Array Entered is : ", arr)
+print("Array of Percentage is : ", arr)
+
 selection_sort(arr)
-print("Array Sorted is : ", arr)
+
+# top five scores using reverse indexing
+print("Top five Scores are : ", arr[-1:-6:-1])

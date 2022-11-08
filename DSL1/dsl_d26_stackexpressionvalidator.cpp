@@ -47,7 +47,6 @@ int main() {
     stack<char> list;
 
     string exp;
-    char lastpara;
     cout << "* Maximun Parinthesis Allowed are 15 *" << endl;
     cout << "Enter the expression:";
     cin >> exp;
@@ -55,6 +54,7 @@ int main() {
 
     // cout<<exp.size()<<endl;
     for (int i = 0; i < exp.size(); i++) {
+        // for opening parenthesis add its closing parenthesis 
         if (exp[i] == '{') {
             list.push('}');
         } else if (exp[i] == '[') {
@@ -62,8 +62,8 @@ int main() {
         } else if (exp[i] == '(') {
             list.push(')');
         } else if ((exp[i] == '}') or (exp[i] == ']') or (exp[i] == ')')) {
-            lastpara = list.pop();
-            if (exp[i] != lastpara) {
+            // check if closing parenthesis is in stack
+            if (exp[i] != list.pop()) {
                 flag = true;
                 break;
             }
