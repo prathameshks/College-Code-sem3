@@ -25,3 +25,36 @@ bubble_sort(arr)
 
 # top five scores using reverse indexing
 print("Top five Scores are : ", arr[-1:-6:-1])
+
+void merge(int *arr, int left, int right, int mid)
+{
+    int i, j, k, ans[50];
+    i = left;
+    k = left;
+    j = mid + 1;
+    while (i <= mid && j <= right) {
+        if (arr[i] < arr[j]) {
+            ans[k] = arr[i];
+            k++;
+            i++;
+        }
+        else  {
+            ans[k] = arr[j];
+            k++;
+            j++;
+        }
+    }
+    while (i <= mid) {
+        ans[k] = arr[i];
+        k++;
+        i++;
+    }
+    while (j <= right) {
+        ans[k] = arr[j];
+        k++;
+        j++;
+    }
+    for (i = left; i < k; i++)  {
+        arr[i] = ans[i];
+    }
+}
