@@ -64,19 +64,14 @@ void append_file(){
 	}
 
 int main(){
-	//write_file();
-	//read_file();
 	int choice;
 	bool loop_control = true;
 	while(loop_control){
-		cout<<"+"<<setw(18)<<setfill('-')<<'-'<<"+"<<setfill(' ')<<endl;
-		cout<<"|"<<setw(7)<<" "<<"MENU"<<setw(7)<<" "<<"|"<<endl;
-		cout<<"+"<<setw(18)<<setfill('-')<<'-'<<"+"<<setfill(' ')<<endl;
-		cout<<"|"<<left<<setw(18)<<"1. Write to File"<<"|"<<endl;
-		cout<<"|"<<setw(18)<<"2. Read from File"<<"|"<<endl;
-		cout<<"|"<<setw(18)<<"3. Add to File"<<"|"<<endl;
-		cout<<"|"<<setw(18)<<"4. Exit"<<"|"<<endl;
-		cout<<"+"<<setw(18)<<setfill('-')<<'-'<<"+"<<setfill(' ')<<endl;
+		cout<<setw(7)<<" "<<"MENU"<<setw(7)<<" "<<endl;
+		cout<<"1. Write to File"<<endl;
+		cout<<"2. Read from File"<<endl;
+		cout<<"3. Add to File"<<endl;
+		cout<<"4. Exit"<<endl;
 		cout<<"Enter your choice:";
 		cin>>choice;
 		switch (choice){
@@ -101,3 +96,17 @@ int main(){
 	cout<<"Thank you"<<endl;
 	return 0;	
 }
+
+
+/*
+// fancy menu
+		cout<<"+"<<setw(18)<<setfill('-')<<'-'<<"+"<<setfill(' ')<<endl;
+		cout<<"|"<<setw(7)<<" "<<"MENU"<<setw(7)<<" "<<"|"<<endl;
+		cout<<"+"<<setw(18)<<setfill('-')<<'-'<<"+"<<setfill(' ')<<endl;
+		cout<<"|"<<left<<setw(18)<<"1. Write to File"<<"|"<<endl;
+		cout<<"|"<<setw(18)<<"2. Read from File"<<"|"<<endl;
+		cout<<"|"<<setw(18)<<"3. Add to File"<<"|"<<endl;
+		cout<<"|"<<setw(18)<<"4. Exit"<<"|"<<endl;
+		cout<<"+"<<setw(18)<<setfill('-')<<'-'<<"+"<<setfill(' ')<<endl;
+		cout<<"Enter your choice:";
+*/

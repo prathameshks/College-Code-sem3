@@ -5,11 +5,9 @@ parenthesized or not*/
 #define max 15
 using namespace std;
 
-template <class T>
 class stack {
-    T list[max];
-
-   public:
+    char list[max];
+    public:
     int top;
     stack() {
         top = -1;
@@ -20,41 +18,24 @@ class stack {
     bool isfull() {
         return (top == max - 1) ? true : false;
     }
-    void push(T elmt) {
+    void push(char elmt) {
         if (not isfull()) {
             top++;
             list[top] = elmt;
         }
     }
-    T pop() {
+    char pop() {
         if (not isempty()) {
             top--;
             return list[top + 1];
         }
     }
-    void show() {
-        if (isempty())
-            cout << "Empty";
-        else
-            for (int i = 0; i <= top; i++)
-                cout << list[i] << " ";
-
-        cout << endl;
-    }
 };
 
-int main() {
-    stack<char> list;
-
-    string exp;
-    cout << "* Maximun Parinthesis Allowed are 15 *" << endl;
-    cout << "Enter the expression:";
-    cin >> exp;
-    bool flag = false;
-
-    // cout<<exp.size()<<endl;
+bool checkParenthesis(string exp) {
+    stack list; 
     for (int i = 0; i < exp.size(); i++) {
-        // for opening parenthesis add its closing parenthesis 
+        // for opening parenthesis add its closing parenthesis
         if (exp[i] == '{') {
             list.push('}');
         } else if (exp[i] == '[') {
@@ -64,16 +45,27 @@ int main() {
         } else if ((exp[i] == '}') or (exp[i] == ']') or (exp[i] == ')')) {
             // check if closing parenthesis is in stack
             if (exp[i] != list.pop()) {
-                flag = true;
+                return false;  // not valid
                 break;
             }
         }
     }
+    if (not list.isempty()) {
+        return false;  // not valid
+    }
+    return true;  // if all runs fine valid
+}
 
-    if (flag or (not list.isempty())) {
-        cout << "Expression is not valid " << endl;
-    } else {
+int main() {
+    string exp;
+    cout << "* Maximun Parinthesis Allowed are 15 *" << endl;
+    cout << "Enter the expression:";
+    cin >> exp;
+    bool result = checkParenthesis(exp);
+    if (result) {
         cout << "Expression is valid " << endl;
+    } else {
+        cout << "Expression is not valid " << endl;
     }
     return 0;
 }
