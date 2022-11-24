@@ -1,20 +1,20 @@
 #include <iostream>
-#define max 30
+#define MAX_ARR_SIZE 30
 using namespace std;
 
-class stack {
-    char list[max];
+class char_stack {
+    char list[MAX_ARR_SIZE];
 
    public:
     int top;
-    stack() {
+    char_stack() {
         top = -1;
     }
     bool isempty() {
         return (top <= -1) ? true : false;
     }
     bool isfull() {
-        return (top == max - 1) ? true : false;
+        return (top == MAX_ARR_SIZE - 1) ? true : false;
     }
     void push(char elmt) {
         if (not isfull()) {
@@ -58,19 +58,18 @@ int priority(char opp) {
 string infixToPostfix(string exp) {
     string postfix;
     char ch;
-    stack opps;
+    char_stack opps;
     for (int i = 0; i < exp.size(); i++) {
         ch = exp[i];
         // cout << ch << " & " << postfix << endl;
         if (ch == '(') {
             opps.push('(');
         } else if (ch == '+' || ch == '^' || ch == '-' || ch == '*' || ch == '/') {
-            if (priority(ch) <= priority(opps.peek())) {
+            while (!opps.isempty() && priority(ch) <= priority(opps.peek())) {
                 postfix += opps.pop();
-                opps.push(ch);
-            } else {
-                opps.push(ch);
             }
+            opps.push(ch);
+
         } else if (ch == ')') {
             while (opps.peek() != '(') {
                 postfix += opps.pop();
@@ -88,8 +87,8 @@ string infixToPostfix(string exp) {
 
 int main() {
     string exp, postfix;
-    // cin>>exp;
-    exp = "A^B*C-D+E/F/(G+H)";
+    cin >> exp;
+    // exp = "A^B*C-D+E/F/(G+H)";
     postfix = infixToPostfix(exp);
     cout << postfix << endl;
 
