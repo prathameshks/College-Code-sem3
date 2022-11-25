@@ -3,9 +3,9 @@ Develop a program in C++ to create a database of student’s information system 
 Name, Roll number, Class, Division, Date of Birth, Blood group, Contact address, Telephone number, Driving license no. and other.
 Construct the database with suitable member functions. Make use of constructor, default constructor, copy constructor, destructor, static member functions, friend class, this pointer, inline code and dynamic memory allocation operators-new and delete as well as exception handling.
 */
-#include <fstream>
-#include <iomanip>
 #include <iostream>
+#include <iomanip>
+#include <fstream>
 #define max 100  // defining size of max array
 
 using namespace std;
@@ -25,14 +25,14 @@ class information {
         address = "Pune, Maharashtra, India";
         dl_num = "MH01/0123/0123456";
     }
-    information(const information &obj)  // copy constructor
+    information(const information *obj)  // copy constructor
     {
-        this->name = obj.name;
-        this->dob = obj.dob;
-        this->bloodgrp = obj.bloodgrp;
-        this->mob_num = obj.mob_num;
-        this->address = obj.address;
-        this->dl_num = obj.dl_num;
+        this->name = obj->name;
+        this->dob = obj->dob;
+        this->bloodgrp = obj->bloodgrp;
+        this->mob_num = obj->mob_num;
+        this->address = obj->address;
+        this->dl_num = obj->dl_num;
     }
     information(string name, string dob, string bloodgrp, string mob_num, string address, string dl_num)  // constructor
     {
@@ -87,7 +87,7 @@ class student {
         class_name = "SE Comp";
         div = 'A';
         remark = "";
-        student_count++;
+        // default constructor is not stored in database 'student_count++' not required;
     }
     student(int roll_no, string class_name, char div, string remark = "")  // constructor
     {
@@ -194,13 +194,11 @@ void display_all(student *s_list[], information *s_info[]) {
     row_print<string, string>("-----", "---------------", "-------", "---------", "---", "----------", "---------", "-------------", "-----------------", "--------------------", "---------------", '+');
     row_print<string, string>("Sr No", "Student Name", "Roll No", "Class", "Div", "Birth Date", "Blood Grp", "Mobile Number", "DL Number", "Adderss of Student", "Remarks(if any)");
     row_print<string, string>("-----", "---------------", "-------", "---------", "---", "----------", "---------", "-------------", "-----------------", "--------------------", "---------------", '+');
-    try {
-        for (int i = 0; i < student::get_student_count(); i++) {
-            row_print<int, char>(i + 1, s_info[i]->name, s_list[i]->roll_no, s_list[i]->class_name, s_list[i]->div, s_info[i]->dob, s_info[i]->bloodgrp, s_info[i]->mob_num, s_info[i]->dl_num, s_info[i]->address, s_list[i]->remark);
-        }
-    } catch (exception e) {
-        cout << e.what();
+
+    for (int i = 0; i < student::get_student_count(); i++) {
+        row_print<int, char>(i + 1, s_info[i]->name, s_list[i]->roll_no, s_list[i]->class_name, s_list[i]->div, s_info[i]->dob, s_info[i]->bloodgrp, s_info[i]->mob_num, s_info[i]->dl_num, s_info[i]->address, s_list[i]->remark);
     }
+
     row_print<string, string>("-----", "---------------", "-------", "---------", "---", "----------", "---------", "-------------", "-----------------", "--------------------", "---------------", '+');
 }
 
@@ -209,33 +207,85 @@ void add_student(int index, student *s_list[], information *s_info[]) {
     int roll_no;
     string class_name, remark;
     char div;
-    cin.ignore();
-    cout << "Enter Student Details below" << endl;
-    cout << "Name:";
-    getline(cin, name);
-    cout << "DOB:";
-    getline(cin, dob);
-    cout << "Blood Group:";
-    getline(cin, bloodgrp);
-    cout << "Mobile Number:";
-    getline(cin, mob_num);
-    cout << "Address:";
-    getline(cin, address);
-    cout << "DL Number:";
-    getline(cin, dl_num);
+    bool while_control = true;
+    char choice;
+
+    while (while_control) {
+        cin.clear();
+        try {
+            // student info data inputs
+            cin.ignore();
+            cout << "Enter Student Details below(* Indicates Required)" << endl;
+            cout << "*Name:";
+            getline(cin, name);
+            cout << "*DOB(DD/MM/YYYY):";
+            getline(cin, dob);
+            cout << "Blood Group:";
+            getline(cin, bloodgrp);
+            cout << "Mobile Number:";
+            getline(cin, mob_num);
+            cout << "*Address:";
+            getline(cin, address);
+            cout << "DL Number:";
+            getline(cin, dl_num);
+
+            // student list data inputs
+            cout << "Class:";
+            getline(cin, class_name);
+            cout << "*Division:";
+            cin >> div;
+            cout << "*Roll Number:";
+            cin >> roll_no;
+            cout << "Remarks:";
+            cin.ignore();
+            getline(cin, remark);
+            if (cin.fail()) {
+                throw(0);
+            } else if (name.size() == 0) {
+                throw(1);
+            } else if (dob.size() != 10) {
+                throw(2);
+            } else if (address.size() == 0) {
+                throw(3);
+            } else {
+                while_control = false;
+            }
+
+        } catch (int err_code) {
+            switch (err_code) {
+                case 0:
+                    cout << "Failed to Add record, Please Try Again" << endl;
+                    break;
+
+                case 1:
+                    cout << "Name can not be empty" << endl;
+                    break;
+
+                case 2:
+                    cout << "Enter a valid DOB in DD/MM/YYYY format" << endl;
+                    break;
+
+                case 3:
+                    cout << "Address can not be empty" << endl;
+                    break;
+
+                default:
+                    cout << "Unexcepted error occured" << endl;
+                    break;
+            }
+
+            cout << "Want to Retry(y/n):";
+            cin >> choice;
+            if (choice == 'y' || choice == 'Y') {
+                while_control = true;
+            } else {
+                while_control = false;
+                return;
+            }
+        }
+    }
 
     s_info[index] = new information(name, dob, bloodgrp, mob_num, address, dl_num);
-
-    cout << "Class:";
-    getline(cin, class_name);
-    cout << "Division:";
-    cin >> div;
-    cout << "Roll Number:";
-    cin >> roll_no;
-    cout << "Remarks:";
-    cin.ignore();
-    getline(cin, remark);
-
     s_list[index] = new student(roll_no, class_name, div, remark);
 }
 
@@ -251,13 +301,9 @@ int search_stu(int roll, student *s_list[]) {
 void save_data(student *s_list[], information *s_info[]) {
     ofstream data_file("StudentData.txt");
     char sep = '$';
-    try {
-        for (int i = 0; i < student::get_student_count(); i++) {
-            // add record to file
-            data_file << s_info[i]->name << sep << s_list[i]->roll_no << sep << s_list[i]->class_name << sep << s_list[i]->div << sep << s_info[i]->dob << sep << s_info[i]->bloodgrp << sep << s_info[i]->mob_num << sep << s_info[i]->dl_num << sep << s_info[i]->address << sep << s_list[i]->remark << endl;
-        }
-    } catch (exception e) {
-        cout << e.what();
+    for (int i = 0; i < student::get_student_count(); i++) {
+        // add record to file
+        data_file << s_info[i]->name << sep << s_list[i]->roll_no << sep << s_list[i]->class_name << sep << s_list[i]->div << sep << s_info[i]->dob << sep << s_info[i]->bloodgrp << sep << s_info[i]->mob_num << sep << s_info[i]->dl_num << sep << s_info[i]->address << sep << s_list[i]->remark << endl;
     }
     data_file.close();
 }
@@ -283,36 +329,37 @@ void load_data(int *current, student *s_list[], information *s_info[]) {
             // skip empty line
             continue;
         }
-		try{
-        last = 0;
-        line_index = 0;
-        for (int i = 0; i < line.size(); i++) {
-            if (line[i] == sep) {
-                all_data[line_index] = line.substr(last, i - last);
-                last = i + 1;
-                line_index++;
+        try {
+            last = 0;
+            line_index = 0;
+            for (int i = 0; i < line.size(); i++) {
+                if (line[i] == sep) {
+                    all_data[line_index] = line.substr(last, i - last);
+                    last = i + 1;
+                    line_index++;
+                }
             }
-        }
-        all_data[line_index] = line.substr(last, line.size() - last);
+            all_data[line_index] = line.substr(last, line.size() - last);
 
-        // passign values to function for object creation
-        s_info[*current] = new information(all_data[0], all_data[4], all_data[5], all_data[6], all_data[8], all_data[7]);
-        s_list[*current] = new student(stoi(all_data[1]), all_data[2], all_data[3][0], all_data[9]);
-        (*current)++;
-        }
-        catch(...){
-        err_cnt++;
+            // passign values to function for object creation
+            s_info[*current] = new information(all_data[0], all_data[4], all_data[5], all_data[6], all_data[8], all_data[7]);
+            s_list[*current] = new student(stoi(all_data[1]), all_data[2], all_data[3][0], all_data[9]);
+            (*current)++;
+        } catch (...) {
+            err_cnt++;
         }
     }
     data_file.close();
-    cout << "Imported " << *current << " records;"<<err_cnt<<" Import Error"<<endl;
-        
+    cout << "Imported " << *current << " records;" << err_cnt << " Import Error" << endl;
 }
 
 int main() {
     // list of pointers for data
     student *stu_list[max];
     information *stu_info[max];
+    // sample rec
+    student *sample_s = new student;
+    information *sample_i = new information;
     bool while_control = true;
     int srch, ind, choice, current = 0;
 
@@ -326,17 +373,19 @@ int main() {
         cout << "  3. Search and Display Student Record" << endl;
         cout << "  4. Delete Student Record" << endl;
         cout << "  5. Edit Student Record" << endl;
-        cout << "  6. Save" << endl;
-        cout << "  7. Save & Exit" << endl;
+        cout << "  6. Show Sample Record" << endl;  // to execute default constructor
+        cout << "  7. Duplicate Record" << endl;    // to execute copy constructor
+        cout << "  8. Save & Exit" << endl;
         cout << "Enter your choice:";
         cin >> choice;
         cout << endl;
         switch (choice) {
             case 1:
-                if (current < 100)  // condition to check limit
-                {
+                // condition to check limit
+                if (current < 100) {
                     add_student(current, stu_list, stu_info);
                     current++;
+                    cout << "Added student record." << endl;
                 } else {
                     cout << "Can't add student record, Because Reached the limit of records." << endl;
                 }
@@ -383,7 +432,7 @@ int main() {
                     stu_list[ind] = stu_list[current - 1];
                     stu_info[ind] = stu_info[current - 1];
                     current--;
-                    cout << "Record Deleted Sucessfully." << endl;
+                    cout << "Record Deleted Successfully." << endl;
                 }
                 break;
             case 5:
@@ -400,15 +449,34 @@ int main() {
                     cout << "No Record Found to Edit" << endl;
                 else {
                     stu_list[ind]->edit(stu_info[ind]);
-                    cout << "Record Edited Sucessfully." << endl;
+                    cout << "Record Edited Successfully." << endl;
                 }
                 break;
-            case 6:
-                save_data(stu_list, stu_info);
-                cout << "Data Saved Sucessfully" << endl;
+            case 6:  // sample
+                cout << "Sample Record is" << endl;
+                sample_s->display_details(sample_i);
+                break;
+            case 7:  // duplicate
+                cout << "Enter Roll number to Duplicate(Enter 0 display list):";
+                cin >> srch;
+                if (srch == 0) {
+                    display_all(stu_list, stu_info);
+                    cout << "Enter Roll number to Duplicate:";
+                    cin >> srch;
+                }
+
+                ind = search_stu(srch, stu_list);
+                if (ind == -1)
+                    cout << "No Record Found to Duplicate" << endl;
+                else {
+                    stu_info[current] = new information(stu_info[ind]);
+                    stu_list[current] = new student(stu_list[ind]);
+                    current++;
+                    cout << "Record Duplicated Successfully, We recommend to change its details." << endl;
+                }
                 break;
 
-            case 7:
+            case 8:
                 save_data(stu_list, stu_info);
                 cout << "Thank you for using Application:)" << endl;
                 while_control = false;
