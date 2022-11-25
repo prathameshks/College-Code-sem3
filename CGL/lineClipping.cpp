@@ -298,7 +298,7 @@ int main()
     cout<<"Cliping in 3 seconds"<<endl;
     delay(3000);
     // cleardevice();
-    w1.draw(YELLOW);
+    w1.draw(YELLOW,0);
 
     for (int i = 0; i < 3; i++)
     {
