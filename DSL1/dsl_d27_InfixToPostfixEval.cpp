@@ -134,7 +134,6 @@ int evalPostfix(string exp) {
             }
         }
     }
-    cout << max_var << VAR_COUNT << endl;
     if (!IS_VAL_SET || max_var > VAR_COUNT) {
         setVariables(max_var - 64);
     }
