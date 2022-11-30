@@ -59,8 +59,8 @@ int main() {
         cout << "1.Add order" << endl;
         cout << "2.Remove order" << endl;
         cout << "3.Display remaining orders" << endl;
-        cout << "4.exit" << endl;
-        cout << "enter your choice:";
+        cout << "4.Exit" << endl;
+        cout << "Enter your choice:";
         cin >> ch;
         switch (ch) {
             case 1:
