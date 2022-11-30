@@ -1,90 +1,90 @@
 #include <iostream>
-#define MAX 5
+#define size 5
 using namespace std;
 
-class CircularQueue {
-    int front, rear;
-    int orders[MAX];
-
+class Queue {
    public:
-    CircularQueue() { front = rear = -1; }
-    bool addOrder(int data);
-    void serveOrder();
-    void display();
+    int arr[size];
+    int f = -1, r = -1;
+    bool isempty() { return (f == -1) ? true : false; }
+
+    bool isfull() { return ((r + 1) % size == f) ? true : false; }
+
+    void enqueue(int val) {
+        if (isfull()) {
+            cout << "Queue is full" << endl;
+        } else {
+            if (f == -1) {
+                f++;
+                r++;
+                arr[r] = val;
+            } else {
+                r = (r + 1) % size;
+                arr[r] = val;
+            }
+        }
+    }
+
+    void dequeue() {
+        if (isempty()) {
+            cout << "Queue is empty" << endl;
+        } else if (f == r) {
+            cout << arr[f] << " has been deleted." << endl;
+            f = r = -1;
+        } else {
+            cout << arr[f] << " has been deleted." << endl;
+            f = (f + 1) % size;
+        }
+    }
+
+    void display() {
+        int temp = f;
+        if (isempty()) {
+            cout << "Order list is empty." << endl;
+        } else {
+            while (temp != r) {
+                cout << arr[temp] << " ";
+                temp = (temp + 1) % size;
+            }
+            cout << arr[temp] << endl;
+        }
+    }
 };
 
-bool CircularQueue::addOrder(int id) {
-    if (rear == -1) {
-        front = rear = 0;
-        orders[rear] = id;
-        return true;
-    } else {
-        int pos = (rear + 1) % MAX;
-        if (pos == front) {
-            cout << "Cafe is Full.Please wait." << endl;
-            return false;
-        } else {
-            rear = pos;
-            orders[rear] = id;
-            return true;
-        }
-    }
-}
-void CircularQueue::serveOrder() {
-    if (front == -1) {
-        cout << "No Orders in Cafe.(Cafe is Empty)" << endl;
-        return;
-    } else {
-        cout << "Order No. " << orders[front] << " is processed." << endl;
-        if (front == rear)  // only one order
-        {
-            front = rear = -1;
-        } else {
-            front = (front + 1) % MAX;
-        }
-    }
-}
-void CircularQueue::display() {
-    int i = 0;
-    if (front == -1) {
-        cout << "Cafe is Empty.No orders." << endl;
-        return;
-    } else {
-        cout << "Order Id's: ";
-        for (i = front; i != rear; i = ((i + 1) % MAX)) {
-            cout << orders[i] << "  ";
-        }
-        cout << orders[rear] << endl;
-    }
-}
-
 int main() {
-    int ch, id = 0;
-    CircularQueue q;
+    int ch;
+    Queue que;
     do {
-        cout << "Menu" << endl;
-        cout << "1. Accept order\n";
-        cout << "2. Serve order\n";
-        cout << "3. Display orders\n";
-        cout << "4. Exit\n";
-        cout << "Enter choice: ";
+        cout << "MENU" << endl;
+        cout << "1.Add order" << endl;
+        cout << "2.Remove order" << endl;
+        cout << "3.Display remaining orders" << endl;
+        cout << "4.exit" << endl;
+        cout << "enter your choice:";
         cin >> ch;
         switch (ch) {
             case 1:
-                id++;
-                if (q.addOrder(id)) {
-                    cout << "Thank you for order.Order id is : " << id << endl;
-                } else {
-                    id--;
+                if (que.isfull()) {
+                    cout << "Queue is full" << endl;
+                    break;
                 }
+                int val;
+                cout << "Enter element you want to add:";
+                cin >> val;
+                que.enqueue(val);
                 break;
             case 2:
-                q.serveOrder();
+                que.dequeue();
                 break;
             case 3:
-                q.display();
+                que.display();
+                break;
+            case 4:
+                cout << "Thank you" << endl;
+                break;
+            default:
+                cout << "Enter valid choice" << endl;
                 break;
         }
     } while (ch != 4);
-    cout << "Thank You.Keep Visiting." << endl;
 }
