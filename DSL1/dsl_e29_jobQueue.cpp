@@ -126,6 +126,7 @@ int main()
             break;
 
         default:
+        cout<<"Enter a valid Choice"<<endl;
             break;
         }
     }while (ch!=4);
