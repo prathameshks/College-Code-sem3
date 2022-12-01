@@ -21,25 +21,18 @@ vector<item> product_rec;
 int sort_basis;
 
 bool compare(item obj1, item obj2) {
-    bool result;
     switch (sort_basis) {
         case 1:
-            result = obj1.code < obj2.code;
-            break;
+            return obj1.code < obj2.code;
         case 2:
-            result = obj1.name < obj2.name;
-            break;
+            return obj1.name < obj2.name;
         case 3:
-            result = obj1.cost < obj2.cost;
-            break;
+            return obj1.cost < obj2.cost;
         case 4:
-            result = obj1.quantity < obj2.quantity;
-            break;
+            return obj1.quantity < obj2.quantity;
         default:
-            result = obj1.code < obj2.code;
-            break;
+            return obj1.code < obj2.code;
     }
-    return result;
 }
 
 void insert_record() {
