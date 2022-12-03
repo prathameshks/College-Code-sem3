@@ -37,3 +37,5 @@ sudo apt-get update
 sudo apt-get upgrade
 sudo apt-get install libglu1-mesa-dev freeglut3-dev mesa-common-dev
 
+run command
+g++ openglsample.cpp -lglut -lGLU -lGL
