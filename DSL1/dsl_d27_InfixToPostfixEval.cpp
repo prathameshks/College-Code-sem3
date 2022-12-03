@@ -4,6 +4,7 @@ using namespace std;
 
 // global value list
 int VAR_VALS[58] = {0};
+int VAR_COUNT = 0;
 bool IS_VAL_SET = false;
 
 // Stack to store characters
@@ -12,24 +13,16 @@ class char_stack {
 
    public:
     int top;
-    char_stack() {
-        top = -1;
-    }
-    bool isempty() {
-        return (top <= -1) ? true : false;
-    }
-    bool isfull() {
-        return (top == MAX_ARR_SIZE - 1) ? true : false;
-    }
+    char_stack() { top = -1; }
+    bool isempty() { return (top <= -1) ? true : false; }
+    bool isfull() { return (top == MAX_ARR_SIZE - 1) ? true : false; }
     void push(char elmt) {
         if (not isfull()) {
             top++;
             list[top] = elmt;
         }
     }
-    char peek() {
-        return (top != -1) ? list[top] : ' ';
-    }
+    char peek() { return (top != -1) ? list[top] : ' '; }
     char pop() {
         if (not isempty()) {
             top--;
@@ -43,15 +36,9 @@ class stack {
 
    public:
     int top;
-    stack() {
-        top = -1;
-    }
-    bool isempty() {
-        return (top <= -1) ? true : false;
-    }
-    bool isfull() {
-        return (top == MAX_ARR_SIZE - 1) ? true : false;
-    }
+    stack() { top = -1; }
+    bool isempty() { return (top <= -1) ? true : false; }
+    bool isfull() { return (top == MAX_ARR_SIZE - 1) ? true : false; }
     void push(int elmt) {
         if (not isfull()) {
             top++;
@@ -91,13 +78,13 @@ string infixToPostfix(string exp) {
         // if char is parenthesis so highest priority
         if (ch == '(') {
             opps.push('(');
-        } else if (ch == '+' || ch == '^' || ch == '-' || ch == '*' || ch == '/') {
+        } else if (ch == '+' || ch == '^' || ch == '-' || ch == '*' ||
+                   ch == '/') {
             // all operators in stack with higher ar equal priority are poped
             while (!opps.isempty() && priority(ch) <= priority(opps.peek())) {
                 postfix += opps.pop();
             }
             opps.push(ch);
-
         } else if (ch == ')') {
             while (opps.peek() != '(') {
                 postfix += opps.pop();
@@ -114,22 +101,41 @@ string infixToPostfix(string exp) {
 }
 
 // function to set values of variables
-void setVariables() {
+void setVariables(int count = 0) {
     int varnum;
-    cout << "Enter Number of Variables in Expression:";
-    cin >> varnum;
+    if (count == 0) {
+        cout << "Enter Number of Variables in Expression:";
+        cin >> varnum;
+    } else {
+        varnum = count;
+    }
+
+    VAR_COUNT = varnum + 64;
     for (int i = 0; i < varnum; i++) {
         cout << "Enter Value for '" << (char)(65 + i) << "':";
         cin >> VAR_VALS[i];
-        VAR_VALS[i + 32] = VAR_VALS[i];  // setting value of lowercase variables same as uppercase
+        VAR_VALS[i + 32] = VAR_VALS[i];  // setting value of lowercase variables
+                                         // same as uppercase
     }
     IS_VAL_SET = true;
 }
 
 // postfix calculator
 int evalPostfix(string exp) {
-    if (!IS_VAL_SET) {
-        setVariables();
+    int max_var = 0;
+    for (int i = 0; i < exp.size(); i++) {
+        if (exp[i] >= 65 && exp[i] <= 90) {
+            if (exp[i] > max_var) {
+                max_var = exp[i];
+            }
+        } else if (exp[i] > 97 && exp[i] <= 122) {
+            if ((exp[i] - 32) > max_var) {
+                max_var = (exp[i] - 32);
+            }
+        }
+    }
+    if (!IS_VAL_SET || max_var > VAR_COUNT) {
+        setVariables(max_var - 64);
     }
 
     int len = exp.size();
@@ -179,7 +185,9 @@ int main() {
     string temp, LastInfixExp;
     int ans;
     while (while_ctrl) {
-        cout << "MENU\n1. Infix To Postfix\n2. Set Variable Values\n3. Postfix Calculator\n4. Exit" << endl;
+        cout << "MENU\n1. Infix To Postfix\n2. Set Variable Values\n3. Postfix "
+                "Calculator\n4. Exit"
+             << endl;
         cout << "Enter Your Choice:";
         cin >> ch;
         switch (ch) {
@@ -197,7 +205,8 @@ int main() {
 
             case 3:
                 if (LastInfixExp.size() != 0) {
-                    cout << "Enter Postfix Expression(Enter 0 to use last converted Expression):";
+                    cout << "Enter Postfix Expression(Enter 0 to use last "
+                            "converted Expression):";
                     cin >> temp;
                     if (temp == "0") {
                         ans = evalPostfix(LastInfixExp);
