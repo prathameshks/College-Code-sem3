@@ -1,10 +1,9 @@
 Open terminal {in home}
 
-To install any software 
+*** To install any software ***
 ~$ sudo apt-get install g++
 
-
-To install libgraph
+*** To install libgraph ***
 1. Go to google search "how to install libgraph in ubuntu"
 2. Go to "https://www.geeksforgeeks.org/add-graphics-h-c-library-gcc-compiler-linux/"
 3. There is link to libgraph "http://download.savannah.gnu.org/releases/libgraph/libgraph-1.0.2.tar.gz"
@@ -21,15 +20,20 @@ To install libgraph
 
 9. to run the cpp file
 	~$g++ demo.cpp -lgraph -o demo.out
-	{gere g++ is compiler
+	{ here g++ is compiler
 	demo.cpp is file
 	-lgraph is to link with graph
 	-o demo.out for file output
 	}
 	~$./demo.out
-	{
-		./demo.out to get output
-	}
+	{ ./demo.out to get output }
 
 	OR
 	~$g++ demo.cpp -lgraph -o demo.out && ./demo.out
+
+
+*** To install OpenGL ***
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install libglu1-mesa-dev freeglut3-dev mesa-common-dev
+
