@@ -13,7 +13,7 @@ class stateList {
 
    public:
     stateList() {
-        list["andaman nikobar"] = 400000;
+        list["andaman nicobar"] = 400000;
         list["andhra pradesh"] = 52787000;
         list["arunachal pradesh"] = 1533000;
         list["assam"] = 35043000;
