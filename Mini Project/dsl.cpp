@@ -47,8 +47,10 @@ item::~item() {
 class order {
    public:
     int orderId;
-    item *data[5];
+    item *data[5]{NULL, NULL, NULL, NULL, NULL};
+    int quantity[5] = {0};
     order *next = NULL;
+    string cust_name;
     order() { orderId = ++order_number; }
 };
 
@@ -93,9 +95,21 @@ class orderQueue {
         }
         return false;
     }
+
+    order *getOrder(int orderid) {
+        order *temp = start;
+        temp = temp->next;
+        while (temp != NULL) {
+            if (temp->orderId == orderid) {
+                return temp;
+            }
+            temp = temp->next;
+        }
+        return NULL;
+    }
 };
 
-//global manager
+// global manager
 orderQueue manager;
 
 void print_center(string str, int width = 50, char end = '\n',
@@ -165,12 +179,42 @@ int getProductQuantity(int item_id) {
     return 0;
 }
 
+void generateBill(int order_id) {
+    // page_title("BILL GENERATOR");
+    order *order_details = manager.getOrder(order_id);
+    if (order_details == NULL) {
+        cout << "No Such Order present";
+        return;
+    }
+    print_center("BILL");
+    cout << "Order Number: " << order_id << endl;
+    cout << "Customer Name : " << order_details->cust_name << endl;
+    int i = 0;
+    double totalAmt=0;
+    row_print<char, char, char>('-', '-', '-', '-', '+', '-');
+    row_print<string, string, string>("ID", "Product", "Price", "Stock");
+    row_print<char, char, char>('-', '-', '-', '-', '+', '-');
+    while (order_details->data[i] != NULL) {
+        row_print(order_details->data[i]->id, order_details->data[i]->name,
+                  order_details->data[i]->price, order_details->data[i]->stock);
+        totalAmt+= order_details->quantity[i] * order_details->data[i]->price;
+        i++;
+    }
+    row_print<char, char, char>('-', '-', '-', '-', '+', '-');
+    cout<<"Total Bill is :"<<totalAmt<<endl;
+    cout<<"END"<<endl;
+}
+
 void takeOrder() {
+    string c_name;
     show_menu();
     int num_of_items, item_id, item_quantity, stock, item_index;
+    cout << "Enter name of Customer:";
+    cin >> c_name;
+    order custm_order;
+    custm_order.cust_name = c_name;
     cout << "Enter number of items you want to add(max 5):";
     cin >> num_of_items;
-    order custm_order;
     for (int i = 0; i < num_of_items && i < 5; i++) {
     retry_take_order:
         cout << "enter id";
@@ -191,6 +235,7 @@ void takeOrder() {
         }
         if (product_list[item_index]->buyProduct(item_quantity)) {
             custm_order.data[i] = product_list[item_index];
+            custm_order.quantity[i] = item_quantity;
         } else {
             cout << "Failed to add item";
         }
@@ -198,12 +243,13 @@ void takeOrder() {
     manager.addOrder(&custm_order);
     cout << "Order sucessfull" << endl;
     cout << "Order number is " << custm_order.orderId << endl;
+    generateBill(custm_order.orderId);
 }
 
 void manage_stock() {
     char choice;
     string p_name;
-    int p_stock,p_id;
+    int p_stock, p_id;
     double p_price;
     int p_index;
     do {
@@ -243,38 +289,32 @@ void manage_stock() {
                 break;
 
             case '2':
-                cin>>p_id;
+                cin >> p_id;
                 p_index = findProduct(p_id);
 
-                if (p_index != -1)
-                {
-                    cout<<"How much new stock has arrived?:";
-                    cin>>p_stock;
+                if (p_index != -1) {
+                    cout << "How much new stock has arrived?:";
+                    cin >> p_stock;
                     product_list[p_index]->addStock(p_stock);
-                    cout<<"Stock updated sucessfully"<<endl;
+                    cout << "Stock updated sucessfully" << endl;
+                } else {
+                    cout << "No such product present" << endl;
                 }
-                else
-                {
-                    cout<<"No such product present"<<endl;
-                }
-                
+
                 system("pause");
                 break;
 
             case '3':
-                cin>>p_id;
+                cin >> p_id;
                 p_index = findProduct(p_id);
 
-                if (p_index != -1)
-                {
+                if (p_index != -1) {
                     delete product_list[p_index];
-                    cout<<"Stock Deleted sucessfully"<<endl;
+                    cout << "Stock Deleted sucessfully" << endl;
+                } else {
+                    cout << "No such product present" << endl;
                 }
-                else
-                {
-                    cout<<"No such product present"<<endl;
-                }
-                
+
                 system("pause");
                 break;
 
