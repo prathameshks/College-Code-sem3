@@ -2,6 +2,27 @@
 #include <iostream>
 using namespace std;
 
+
+//for using terminal claer and pause
+#ifdef _WIN32
+bool windows = true;
+#else
+bool windows = false;
+#endif  // _WIN32
+
+void clear() {
+    if (windows)
+        system("cls");
+    else
+        system("clear");
+}
+void wait() {
+    if (windows)
+        system("pause");
+    else
+        system("read");
+}
+
 class item;
 class orderQueue;
 template <class i = int, class s = string, class d = double>
@@ -172,7 +193,7 @@ void print_center(string str, int width = 50, char end = '\n',
 }
 
 void page_title(string str) {
-    system("cls");
+    clear();
     print_center("CAFE MANAGEMENT SYSTEM");
     cout << endl;
     print_center(str);
@@ -328,7 +349,7 @@ void manage_stock() {
                     cout << "Product added sucessfully" << endl;
                 }
 
-                system("pause");
+                wait();
                 break;
 
             case '2':
@@ -345,7 +366,7 @@ void manage_stock() {
                     cout << "No such product present" << endl;
                 }
 
-                system("pause");
+                wait();
                 break;
 
             case '3':
@@ -360,12 +381,12 @@ void manage_stock() {
                     cout << "No such product present" << endl;
                 }
 
-                system("pause");
+                wait();
                 break;
 
             case '4':
 
-                // system("pause");
+                // wait();
                 break;
 
             default:
@@ -434,37 +455,37 @@ int main() {
             case '1':
                 page_title("PRODUCT MENU");
                 show_menu();
-                system("pause");
+                wait();
                 break;
 
             case '2':
                 takeOrder();
-                system("pause");
+                wait();
                 break;
 
             case '3':
                 processOrder();
-                system("pause");
+                wait();
                 break;
 
             case '4':
                 manager.showAllOrders();
-                system("pause");
+                wait();
                 break;
 
             case '5':
                 deleteOrder();
-                system("pause");
+                wait();
                 break;
 
             case '6':
                 manage_stock();
-                system("pause");
+                wait();
                 break;
 
             case '7':
 
-                system("pause");
+                wait();
                 break;
 
             default:
