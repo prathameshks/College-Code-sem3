@@ -4,6 +4,16 @@ using namespace std;
 
 class item;
 class orderQueue;
+template <class i = int, class s = string, class d = double>
+void row_print(i id, s name, d price, i stock, char sep = '|',
+               char fillChar = ' ') {
+    cout << setfill(fillChar);
+    cout << sep << setw(7) << right << id << sep;
+    cout << setw(25) << left << name << sep;
+    cout << setw(7) << left << setprecision(2) << price << sep;
+    cout << setw(6) << stock << sep << endl;
+    cout << right << setfill(' ');
+}
 
 // Global menu items list
 int total_count = 0;
@@ -51,6 +61,7 @@ class order {
     int quantity[5] = {0};
     order *next = NULL;
     string cust_name;
+    double total;
     order() { orderId = ++order_number; }
 };
 
@@ -70,6 +81,9 @@ class orderQueue {
     }
 
     order *pop() {
+        if (start == NULL) {
+            return NULL;
+        }
         order *process_order = start;
         start = start->next;
         return process_order;
@@ -98,7 +112,6 @@ class orderQueue {
 
     order *getOrder(int orderid) {
         order *temp = start;
-        temp = temp->next;
         while (temp != NULL) {
             if (temp->orderId == orderid) {
                 return temp;
@@ -106,6 +119,25 @@ class orderQueue {
             temp = temp->next;
         }
         return NULL;
+    }
+
+    void showAllOrders() {
+        order *temp = start;
+        int sum = 0;
+        row_print<char, char, char>('-', '-', '-', '-', '+', '-');
+        row_print<string, string, string>("O ID", "Name", "Total", "Itm Cnt");
+        row_print<char, char, char>('-', '-', '-', '-', '+', '-');
+        while (temp != NULL) {
+            sum = 0;
+            for (int i = 0; i < 5; i++) {
+                sum += temp->quantity[i];
+            }
+            row_print<int, string, double>(temp->orderId, temp->cust_name,
+                                           temp->total, sum);
+            temp = temp->next;
+        }
+        row_print<char, char, char>('-', '-', '-', '-', '+', '-');
+        cout<<endl;
     }
 };
 
@@ -128,16 +160,6 @@ void print_center(string str, int width = 50, char end = '\n',
                  << end;
         }
     }
-}
-
-template <class i = int, class s = string, class d = double>
-void row_print(i id, s name, d price, i stock, char sep = '|',
-               char fillChar = ' ') {
-    cout << setfill(fillChar);
-    cout << sep << setw(7) << right << id << sep;
-    cout << setw(25) << left << name << sep;
-    cout << setw(7) << left << setprecision(2) << price << sep;
-    cout << setw(6) << stock << sep << endl;
 }
 
 void page_title(string str) {
@@ -178,31 +200,43 @@ int getProductQuantity(int item_id) {
     }
     return 0;
 }
+void showBill(order *ord) {
+    cout << setfill('-') << setw(50) << '-' << endl << endl;
+    print_center("BILL");
+    cout << "Order Number: " << ord->orderId << endl;
+    cout << "Customer Name : " << ord->cust_name << endl;
+    int i = 0;
+    row_print<char, char, char>('-', '-', '-', '-', '+', '-');
+    row_print<string, string, string>("ID", "Product", "Price", "Qty");
+    row_print<char, char, char>('-', '-', '-', '-', '+', '-');
+    while (ord->data[i] != NULL && i < 5) {
+        row_print(ord->data[i]->id, ord->data[i]->name, ord->data[i]->price,
+                  ord->quantity[i]);
+        i++;
+    }
+    row_print<char, char, char>('-', '-', '-', '-', '+', '-');
+    cout << "Total Bill is :" << fixed << ord->total << endl;
+    print_center("END");
+    cout << setfill('-') << setw(50) << '-' << endl;
+}
 
 void generateBill(int order_id) {
     // page_title("BILL GENERATOR");
     order *order_details = manager.getOrder(order_id);
     if (order_details == NULL) {
-        cout << "No Such Order present";
+        cout << "No Such Order present" << endl;
         return;
     }
-    print_center("BILL");
-    cout << "Order Number: " << order_id << endl;
-    cout << "Customer Name : " << order_details->cust_name << endl;
+
     int i = 0;
-    double totalAmt=0;
-    row_print<char, char, char>('-', '-', '-', '-', '+', '-');
-    row_print<string, string, string>("ID", "Product", "Price", "Stock");
-    row_print<char, char, char>('-', '-', '-', '-', '+', '-');
-    while (order_details->data[i] != NULL) {
-        row_print(order_details->data[i]->id, order_details->data[i]->name,
-                  order_details->data[i]->price, order_details->data[i]->stock);
-        totalAmt+= order_details->quantity[i] * order_details->data[i]->price;
+    double totalAmt = 0;
+    while (order_details->data[i] != NULL && i < 5) {
+        totalAmt += order_details->quantity[i] * order_details->data[i]->price;
         i++;
     }
-    row_print<char, char, char>('-', '-', '-', '-', '+', '-');
-    cout<<"Total Bill is :"<<totalAmt<<endl;
-    cout<<"END"<<endl;
+
+    order_details->total = totalAmt;
+    showBill(order_details);
 }
 
 void takeOrder() {
@@ -211,8 +245,8 @@ void takeOrder() {
     int num_of_items, item_id, item_quantity, stock, item_index;
     cout << "Enter name of Customer:";
     cin >> c_name;
-    order custm_order;
-    custm_order.cust_name = c_name;
+    order *custm_order = new order;
+    custm_order->cust_name = c_name;
     cout << "Enter number of items you want to add(max 5):";
     cin >> num_of_items;
     for (int i = 0; i < num_of_items && i < 5; i++) {
@@ -234,16 +268,16 @@ void takeOrder() {
             goto retry_item_quantity;
         }
         if (product_list[item_index]->buyProduct(item_quantity)) {
-            custm_order.data[i] = product_list[item_index];
-            custm_order.quantity[i] = item_quantity;
+            custm_order->data[i] = product_list[item_index];
+            custm_order->quantity[i] = item_quantity;
         } else {
             cout << "Failed to add item";
         }
     }
-    manager.addOrder(&custm_order);
+    manager.addOrder(custm_order);
     cout << "Order sucessfull" << endl;
-    cout << "Order number is " << custm_order.orderId << endl;
-    generateBill(custm_order.orderId);
+    cout << "Order number is " << custm_order->orderId << endl;
+    generateBill(custm_order->orderId);
 }
 
 void manage_stock() {
@@ -289,6 +323,7 @@ void manage_stock() {
                 break;
 
             case '2':
+                cout << "Enter Product Id:" << endl;
                 cin >> p_id;
                 p_index = findProduct(p_id);
 
@@ -305,6 +340,7 @@ void manage_stock() {
                 break;
 
             case '3':
+                cout << "Enter Product Id:" << endl;
                 cin >> p_id;
                 p_index = findProduct(p_id);
 
@@ -330,6 +366,17 @@ void manage_stock() {
     } while (choice != '4');
 }
 
+void processOrder() {
+    order *processed = manager.pop();
+    if (processed == NULL) {
+        cout << "Order queue is Empty" << endl;
+        return;
+    }
+
+    cout << "Order Processed with ID " << processed->orderId << endl;
+    showBill(processed);
+}
+
 // Main Program
 int main() {
     char choice;
@@ -342,7 +389,7 @@ int main() {
         cout << setw(15) << " "
              << "(3) Process Order" << endl;
         cout << setw(15) << " "
-             << "(4) Cancel an Order" << endl;
+             << "(4) Show All Orders" << endl;
         cout << setw(15) << " "
              << "(5) Manage Stock" << endl;
         cout << setw(15) << " "
@@ -365,12 +412,12 @@ int main() {
                 break;
 
             case '3':
-
+                processOrder();
                 system("pause");
                 break;
 
             case '4':
-
+                manager.showAllOrders();
                 system("pause");
                 break;
 
@@ -391,3 +438,9 @@ int main() {
     } while (choice != '6');
     return 0;
 }
+
+/*
+5 1 coffee 25 60
+
+
+*/
