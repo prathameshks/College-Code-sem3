@@ -85,11 +85,20 @@ class orderQueue {
             return NULL;
         }
         order *process_order = start;
+        if (start == end) {
+            start = end = NULL;
+            return process_order;
+        }
+
         start = start->next;
         return process_order;
     }
 
     bool deleteOrder(int orderid) {
+        if (start == NULL) {
+            return false;
+        }
+
         if (start->orderId == orderid) {
             pop();
             return true;
@@ -137,7 +146,7 @@ class orderQueue {
             temp = temp->next;
         }
         row_print<char, char, char>('-', '-', '-', '-', '+', '-');
-        cout<<endl;
+        cout << endl;
     }
 };
 
@@ -377,6 +386,26 @@ void processOrder() {
     showBill(processed);
 }
 
+void deleteOrder() {
+    page_title("DELETE AN ORDER");
+    int order_id;
+    manager.showAllOrders();
+    cout << "-- Enter 0 to cancel --" << endl;
+    cout << "Enter order id:";
+    cin >> order_id;
+    if (order_id == 0) {
+        cout << "Operation Cancled" << endl;
+        return;
+    }
+
+    bool status = manager.deleteOrder(order_id);
+    if (status) {
+        cout << "Order deleted Sucessfully" << endl;
+    } else {
+        cout << "Order Not Found" << endl;
+    }
+}
+
 // Main Program
 int main() {
     char choice;
@@ -391,9 +420,11 @@ int main() {
         cout << setw(15) << " "
              << "(4) Show All Orders" << endl;
         cout << setw(15) << " "
-             << "(5) Manage Stock" << endl;
+             << "(5) Delete an Order" << endl;
         cout << setw(15) << " "
-             << "(6) Exit App" << endl;
+             << "(6) Manage Stock" << endl;
+        cout << setw(15) << " "
+             << "(7) Exit App" << endl;
 
         cout << endl;
         cout << setw(30) << "Enter Your Choice :";
@@ -422,11 +453,16 @@ int main() {
                 break;
 
             case '5':
-                manage_stock();
+                deleteOrder();
                 system("pause");
                 break;
 
             case '6':
+                manage_stock();
+                system("pause");
+                break;
+
+            case '7':
 
                 system("pause");
                 break;
@@ -435,7 +471,8 @@ int main() {
 
                 break;
         }
-    } while (choice != '6');
+    } while (choice != '7');
+    page_title("Thank You For Using App");
     return 0;
 }
 
