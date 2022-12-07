@@ -49,11 +49,6 @@ void draw_square(Point a, GLint length) {
 		c = {b.x,	b.y+length},
 		d = {c.x-length, c.y};
 
-draw_dda(a, b);
-	//draw_dda(a, b);
-	//draw_dda(b, c);
-	//draw_dda(c, d);
-	//draw_dda(d, a);	
 }
 
 void display() {
@@ -101,7 +96,7 @@ int main(int argc, char** argv) {
 	glutInitWindowPosition(400, 200);
 	glutInitWindowSize(640, 480);
 	glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB);
-	glutCreateWindow("OpenGL");
+	glutCreateWindow("Ball Game");
 	init();
 	glutKeyboardFunc(onKeyboard);
 	glutDisplayFunc(display);
