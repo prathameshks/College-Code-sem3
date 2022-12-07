@@ -2,8 +2,7 @@
 #include <iostream>
 using namespace std;
 
-
-//for using terminal claer and pause
+// for using terminal claer and pause
 #ifdef _WIN32
 bool windows = true;
 #else
