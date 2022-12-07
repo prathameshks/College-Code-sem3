@@ -17,10 +17,13 @@ void clear() {
         system("clear");
 }
 void wait() {
+    char s;
     if (windows)
         system("pause");
     else
-        system("read");
+        cin>>s;
+        s = getchar();
+        cin.ignore();
 }
 
 class item;
