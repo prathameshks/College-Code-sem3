@@ -17,12 +17,12 @@ void clear() {
 }
 void wait() {
     char s;
-    if (windows)
+    if (windows) {
         system("pause");
-    else
-        cin>>s;
+    } else {
         s = getchar();
         cin.ignore();
+    }
 }
 
 class item;
