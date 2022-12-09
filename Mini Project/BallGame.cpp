@@ -1,4 +1,4 @@
-// Creating ball in the bastet game
+// Creating ball in the basket game
 #define GL_SILENCE_DEPRECATION
 #include <GL/glut.h>
 #include <stdio.h>
@@ -74,7 +74,7 @@ void display() {
     if (ballY < -2) {
         flagout = 1;
         cout << "Score is " << count << endl;
-        
+
         }
 
     glPushMatrix();
