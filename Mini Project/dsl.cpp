@@ -103,6 +103,8 @@ class orderQueue {
         }
     }
 
+    bool isEmpty() { return (start == NULL) ? true : false; }
+
     order *pop() {
         if (start == NULL) {
             return NULL;
@@ -154,10 +156,15 @@ class orderQueue {
     }
 
     void showAllOrders() {
+        if (isEmpty()) {
+            cout << "Queue is Empty" << endl;
+            return;
+        }
+
         order *temp = start;
         int sum = 0;
         row_print<char, char, char>('-', '-', '-', '-', '+', '-');
-        row_print<string, string, string>("O ID", "Name", "Total", "Itm Cnt");
+        row_print<string, string, string>("ID", "Name", "Total", "Itm Cnt");
         row_print<char, char, char>('-', '-', '-', '-', '+', '-');
         while (temp != NULL) {
             sum = 0;
@@ -204,6 +211,11 @@ void page_title(string str) {
 
 // display all data
 void show_menu() {
+    if (total_count == 0) {
+        cout << "Menu Is Empty" << endl;
+        return;
+    }
+
     row_print<char, char, char>('-', '-', '-', '-', '+', '-');
     row_print<string, string, string>("ID", "Product", "Price", "Stock");
     row_print<char, char, char>('-', '-', '-', '-', '+', '-');
@@ -272,6 +284,11 @@ void generateBill(int order_id) {
 }
 
 void takeOrder() {
+    if (total_count == 0) {
+        cout << "Menu Is Empty" << endl;
+        return;
+    }
+
     string c_name;
     show_menu();
     int num_of_items, item_id, item_quantity, stock, item_index;
@@ -283,7 +300,7 @@ void takeOrder() {
     cin >> num_of_items;
     for (int i = 0; i < num_of_items && i < 5; i++) {
     retry_take_order:
-        cout << "enter id";
+        cout << "Enter item id to buy";
         cin >> item_id;
         item_index = findProduct(item_id);
         if (item_index == -1) {
@@ -292,11 +309,11 @@ void takeOrder() {
         }
         stock = getProductQuantity(item_id);
     retry_item_quantity:
-        cout << "enter quantity";
+        cout << "Enter Quantity you Want to buy:";
         cin >> item_quantity;
         if (stock < item_quantity) {
-            cout << "Stock not Available" << endl;
-            cout << "Available stock " << stock << endl;
+            cout << "Sorry, Stock not Available" << endl;
+            cout << "Available stock is " << stock << endl;
             goto retry_item_quantity;
         }
         if (product_list[item_index]->buyProduct(item_quantity)) {
@@ -305,6 +322,7 @@ void takeOrder() {
         } else {
             cout << "Failed to add item";
         }
+        cout << endl;
     }
     manager.addOrder(custm_order);
     cout << "Order sucessfull" << endl;
@@ -386,14 +404,6 @@ void manage_stock() {
                 wait();
                 break;
 
-            case '4':
-
-                // wait();
-                break;
-
-            default:
-
-                break;
         }
     } while (choice != '4');
 }
@@ -413,6 +423,9 @@ void deleteOrder() {
     page_title("DELETE AN ORDER");
     int order_id;
     manager.showAllOrders();
+    if(manager.isEmpty()){
+        return;
+    }
     cout << "-- Enter 0 to cancel --" << endl;
     cout << "Enter order id:";
     cin >> order_id;
@@ -485,14 +498,6 @@ int main() {
                 wait();
                 break;
 
-            case '7':
-
-                wait();
-                break;
-
-            default:
-
-                break;
         }
     } while (choice != '7');
     page_title("Thank You For Using App");
