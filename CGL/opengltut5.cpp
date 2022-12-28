@@ -17,9 +17,9 @@ void display() {
 
     glTranslatef(0, 0, -5);
     glRotatef(angle, 1, 0, 1);
-    // glRotatef(angle, 1, 1, 1);
-    // glRotatef(angle, 1, 1, 0);
-    // glRotatef(angle, 0, 1, 1);
+    glRotatef(angle, 1, 1, 1);
+    glRotatef(angle, 1, 1, 0);
+    glRotatef(angle, 0, 1, 1);
 
     // draw here
     glBegin(GL_QUADS);
