@@ -403,7 +403,6 @@ void manage_stock() {
 
                 wait();
                 break;
-
         }
     } while (choice != '4');
 }
@@ -423,7 +422,7 @@ void deleteOrder() {
     page_title("DELETE AN ORDER");
     int order_id;
     manager.showAllOrders();
-    if(manager.isEmpty()){
+    if (manager.isEmpty()) {
         return;
     }
     cout << "-- Enter 0 to cancel --" << endl;
@@ -497,7 +496,6 @@ int main() {
                 manage_stock();
                 wait();
                 break;
-
         }
     } while (choice != '7');
     page_title("Thank You For Using App");
