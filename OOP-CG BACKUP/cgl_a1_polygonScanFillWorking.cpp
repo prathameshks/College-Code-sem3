@@ -1,138 +1,127 @@
+/* Define the structure to store the edges*/
 #include <graphics.h>
-#include <stdlib.h>
 
 #include <iostream>
 using namespace std;
-class point {
-   public:
-    int x, y;
+struct edge {
+    int x1, y1, x2, y2, flag;
 };
-class poly {
-   private:
-    point p[20];
-    int inter[20], x, y;
-    int v, xmin, ymin, xmax, ymax;
-
-   public:
-    int c;
-    void read();
-    void calcs();
-    void display();
-    void ints(float);
-    void sort(int);
-};
-void poly::read() {
-    int i;
-    cout << "\n Scan Fill Algorithm ";
-    cout << "\n Enter Number Of Vertices Of Polygon: ";
-    cin >> v;
-    if (v > 2) {
-        for (i = 0; i < v; i++)  // ACCEPT THE VERTICES
-        {
-            cout << "\nEnter co-ordinate no. " << i + 1 << " : ";
-            cout << "\n\tx" << (i + 1) << "=";
-            cin >> p[i].x;
-            cout << "\n\ty" << (i + 1) << "=";
-            cin >> p[i].y;
-        }
-        p[i].x = p[0].x;
-        p[i].y = p[0].y;
-        xmin = xmax = p[0].x;
-        ymin = ymax = p[0].y;
-    } else
-        cout << "\n Enter valid no. of vertices.";
-}
-void poly::calcs() {
-    for (int i = 0; i < v; i++) {
-        if (xmin > p[i].x) xmin = p[i].x;
-        if (xmax < p[i].x) xmax = p[i].x;
-        if (ymin > p[i].y) ymin = p[i].y;
-        if (ymax < p[i].y) ymax = p[i].y;
-    }
-}
-void poly::display() {
-    int ch1;
-    char ch = 'y';
-    float s, s2;
-    do {
-        cout << "\n\nMENU:";
-        cout << "\n\n\t1 . Scan line Fill ";
-        cout << "\n\n\t2 . Exit ";
-        cout << "\n\nEnter your choice:";
-        cin >> ch1;
-        switch (ch1) {
-            case 1:
-                s = ymin + 0.01;
-                delay(100);
-                cleardevice();
-                while (s <= ymax) {
-                    ints(s);
-                    sort(s);
-                    s++;
-                }
-                break;
-            case 2:
-                exit(0);
-        }
-        cout << "Do you want to continue?: ";
-        cin >> ch;
-    } while (ch == 'y' || ch == 'Y');
-}
-void poly::ints(float z) {
-    int x1, x2, y1, y2, temp;
-    c = 0;
-    for (int i = 0; i < v; i++) {
-        x1 = p[i].x;
-        y1 = p[i].y;
-        x2 = p[i + 1].x;
-        y2 = p[i + 1].y;
-        if (y2 < y1) {
-            temp = x1;
-            x1 = x2;
-            x2 = temp;
-            temp = y1;
-            y1 = y2;
-            y2 = temp;
-        }
-        if (z <= y2 && z >= y1) {
-            if ((y1 - y2) == 0)
-                x = x1;
-            else {
-                x = ((x2 - x1) * (z - y1)) / (y2 - y1);
-                x = x + x1;
-            }
-            if (x <= xmax && x >= xmin) inter[c++] = x;
-        }
-    }
-}
-void poly::sort(int z)  // sorting
-{
-    int temp, j, i;
-    for (i = 0; i < v; i++) {
-        line(p[i].x, p[i].y, p[i + 1].x, p[i + 1].y);
-    }
-    delay(100);
-    for (i = 0; i < c; i += 2) {
-        delay(100);
-        line(inter[i], z, inter[i + 1], z);
-    }
-}
-int main()  // main
-{
-    int gd = DETECT, gm;
+int main() {
+    int gd = DETECT, gm, n, i, j, k;
+    struct edge ed[10], temped;
+    float dx, dy, m[10], x_int[10], inter_x[10];
+    int x[10], y[10], ymax = 0, ymin = 480, yy, temp;
     initgraph(&gd, &gm, NULL);
-    cleardevice();
-    poly x;
-    int cl;
-    x.read();
-    x.calcs();
-    cleardevice();
-    cout << "\n\tEnter The Color You Want :(In Range 0 To 15 )->";  // selecting color
-    cin >> cl;
-    setcolor(cl);
-    x.display();
 
-    closegraph();  // closing graph
-    getch();
-    return 0;
+    /*read the number of vertices of the polygon*/
+    cout << "Enter the no.of vertices of the graph :";
+    cin >> n;
+
+    /*read the vertices of the polygon and also find ymax and ymin*/
+    cout << "Enter the vertices";
+    for (i = 0; i < n; i++) {
+        cin >> x[i];
+        cin >> y[i];
+        if (y[i] > ymax) ymax = y[i];
+        if (y[i] < ymin) ymin = y[i];
+        ed[i].x1 = x[i];
+        ed[i].y1 = y[i];
+    }
+
+    /*store the edge information*/
+    cout << "\nEdge Information\n";
+    for (i = 0; i < n - 1; i++) {
+        ed[i].x2 = ed[i + 1].x1;
+        ed[i].y2 = ed[i + 1].y1;
+        ed[i].flag = 0;
+
+        cout << "(" << ed[i].x1 << ", " << ed[i].y1 << ") (" << ed[i].x2 << ", "
+             << ed[i].y2 << ")" << endl;
+    }
+
+    ed[i].x2 = ed[0].x1;
+    ed[i].y2 = ed[0].y1;
+    ed[i].flag = 0;
+    cout << "(" << ed[i].x1 << ", " << ed[i].y1 << ") (" << ed[i].x2 << ", "
+         << ed[i].y2 << ")" << endl;
+
+    /*Check for y1>y2, if not interchnge y1 and y2 */
+    cout << "\nUpdated Edge Information\n";
+    for (i = 0; i < n; i++) {
+        if (ed[i].y1 < ed[i].y2) {
+            temp = ed[i].x1;
+            ed[i].x1 = ed[i].x2;
+            ed[i].x2 = temp;
+            temp = ed[i].y1;
+            ed[i].y1 = ed[i].y2;
+            ed[i].y2 = temp;
+        }
+        cout << "(" << ed[i].x1 << ", " << ed[i].y1 << ") (" << ed[i].x2 << ", "
+             << ed[i].y2 << ")" << endl;
+    }
+
+    /*Draw the polygon*/
+    for (i = 0; i < n; i++) {
+        line(ed[i].x1, ed[i].y1, ed[i].x2, ed[i].y2);
+    }
+
+    /*calculating 1/slope of each edge */
+    for (i = 0; i < n; i++) {
+        dx = ed[i].x2 - ed[i].x1;
+        dy = ed[i].y2 - ed[i].y1;
+        if (dy == 0) {
+            m[i] = 0;
+        } else {
+            m[i] = dx / dy;
+        }
+        inter_x[i] = ed[i].x1;
+    }
+
+    /*making the Active edges*/
+    yy = ymax;
+    while (yy > ymin) {
+        for (i = 0; i < n; i++) {
+            if (yy >= ed[i].y2 && yy <= ed[i].y1)
+                ed[i].flag = 1;
+            else
+                ed[i].flag = 0;
+        }
+        j = 0;
+        for (i = 0; i < n; i++) {
+            if (ed[i].flag == 1) {
+                if (yy != ed[i].y1)  // scanline intersects at vertex
+                {
+                    x_int[j] = inter_x[i] + (-m[i]);
+                    inter_x[i] = x_int[j];
+                    j++;
+                }else{
+                setcolor(RED);
+                cout<<yy<<endl;
+                }
+            }
+        }
+        /*sorting the x intersaction*/
+        for (i = 0; i < j; i++) {
+            for (k = 0; k < j - 1; k++) {
+                if (x_int[k] > x_int[k + 1]) {
+                    temp = (int)x_int[k];
+                    x_int[k] = x_int[k + 1];
+                    x_int[k + 1] = temp;
+                }
+            }
+        }
+        /*extracting pairs of values to draw lines*/
+        for (i = 0; i < j; i = i + 2) {
+            line((int)x_int[i], yy, (int)x_int[i + 1], yy);
+        }
+        yy--;
+        delay(50);
+    }
+    closegraph();
 }
+/*
+Enter the vertices 80 20 100 80 150 60 130 200 40 250
+6
+50 50 100 50 120 120 80 80 50 120 40 60
+*/
+

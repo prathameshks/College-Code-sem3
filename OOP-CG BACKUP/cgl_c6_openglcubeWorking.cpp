@@ -12,47 +12,47 @@ void mydisplay() {
     changePerspective();
 
     glBegin(GL_QUADS);
-    // front (red)
-    glColor3f(1.0, 0.0, 0.0);
-    glVertex3f(-1.0, 1.0, 1.0);
-    glVertex3f(-1.0, -1.0, 1.0);
-    glVertex3f(1.0, -1.0, 1.0);
-    glVertex3f(1.0, 1.0, 1.0);
+        // front (red)
+        glColor3f(1.0, 0.0, 0.0);
+        glVertex3f(-1.0, 1.0, 1.0);
+        glVertex3f(-1.0, -1.0, 1.0);
+        glVertex3f(1.0, -1.0, 1.0);
+        glVertex3f(1.0, 1.0, 1.0);
 
-    // back (green)
-    glColor3f(0.0, 1.0, 0.0);
-    glVertex3f(1.0, 1.0, -1.0);
-    glVertex3f(1.0, -1.0, -1.0);
-    glVertex3f(-1.0, -1.0, -1.0);
-    glVertex3f(-1.0, 1.0, -1.0);
+        // back (green)
+        glColor3f(0.0, 1.0, 0.0);
+        glVertex3f(1.0, 1.0, -1.0);
+        glVertex3f(1.0, -1.0, -1.0);
+        glVertex3f(-1.0, -1.0, -1.0);
+        glVertex3f(-1.0, 1.0, -1.0);
 
-    // right (blue)
-    glColor3f(0.0, 0.0, 1.0);
-    glVertex3f(1.0, 1.0, 1.0);
-    glVertex3f(1.0, -1.0, 1.0);
-    glVertex3f(1.0, -1.0, -1.0);
-    glVertex3f(1.0, 1.0, -1.0);
+        // right (blue)
+        glColor3f(0.0, 0.0, 1.0);
+        glVertex3f(1.0, 1.0, 1.0);
+        glVertex3f(1.0, -1.0, 1.0);
+        glVertex3f(1.0, -1.0, -1.0);
+        glVertex3f(1.0, 1.0, -1.0);
 
-    // left (yellow)
-    glColor3f(1.0, 1.0, 0.0);
-    glVertex3f(-1.0, 1.0, -1.0);
-    glVertex3f(-1.0, -1.0, -1.0);
-    glVertex3f(-1.0, -1.0, 1.0);
-    glVertex3f(-1.0, 1.0, 1.0);
+        // left (yellow)
+        glColor3f(1.0, 1.0, 0.0);
+        glVertex3f(-1.0, 1.0, -1.0);
+        glVertex3f(-1.0, -1.0, -1.0);
+        glVertex3f(-1.0, -1.0, 1.0);
+        glVertex3f(-1.0, 1.0, 1.0);
 
-    // top (cyan)
-    glColor3f(0.0, 1.0, 1.0);
-    glVertex3f(-1.0, 1.0, -1.0);
-    glVertex3f(-1.0, 1.0, 1.0);
-    glVertex3f(1.0, 1.0, 1.0);
-    glVertex3f(1.0, 1.0, -1.0);
+        // top (cyan)
+        glColor3f(0.0, 1.0, 1.0);
+        glVertex3f(-1.0, 1.0, -1.0);
+        glVertex3f(-1.0, 1.0, 1.0);
+        glVertex3f(1.0, 1.0, 1.0);
+        glVertex3f(1.0, 1.0, -1.0);
 
-    // bottom (magenta)
-    glColor3f(1.0, 0.0, 1.0);
-    glVertex3f(-1.0, -1.0, -1.0);
-    glVertex3f(-1.0, -1.0, 1.0);
-    glVertex3f(1.0, -1.0, 1.0);
-    glVertex3f(1.0, -1.0, -1.0);
+        // bottom (magenta)
+        glColor3f(1.0, 0.0, 1.0);
+        glVertex3f(-1.0, -1.0, -1.0);
+        glVertex3f(-1.0, -1.0, 1.0);
+        glVertex3f(1.0, -1.0, 1.0);
+        glVertex3f(1.0, -1.0, -1.0);
 
     glEnd();
 
