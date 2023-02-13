@@ -15,24 +15,22 @@ void function() {
 
     glColor3f(1, 0, 0);
     glVertex2f(1, 1);
-    
-    
+
     glColor3f(0, 1, 0);
     glVertex2f(1, 10);
-    
-    
+
     glColor3f(0, 0, 1);
     glVertex2f(10, 1);
-    
+
     glColor3f(1, 0, 0);
     glVertex2f(10, 10);
-    
+
     glColor3f(0, 1, 0);
     glVertex2f(20, 1);
-    
+
     glColor3f(0, 0, 1);
     glVertex2f(20, 10);
-    
+
     glEnd();
     glFlush();
 }
@@ -47,6 +45,19 @@ void reshape(int w, int h) {
     glMatrixMode(GL_MODELVIEW);
 }
 
+void keyboard(unsigned char c, int x, int y) {
+    cout << "c =" << c << endl;
+    cout << "x =" << x << endl;
+    cout << "y =" << y << endl;
+}
+
+void mouse(int a, int b, int x, int y) {
+    cout << "a =" << a << endl;
+    cout << "b =" << b << endl;
+    cout << "x =" << x << endl;
+    cout << "y =" << y << endl;
+}
+
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
@@ -55,6 +66,8 @@ int main(int argc, char** argv) {
     glutInitWindowPosition(400, 300);
     glutDisplayFunc(function);
     glutReshapeFunc(reshape);
+    glutKeyboardFunc(keyboard);
+    glutMouseFunc(mouse);
     init();
     glutMainLoop();
     return 0;
