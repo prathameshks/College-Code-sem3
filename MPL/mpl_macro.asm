@@ -1,6 +1,6 @@
 section .data
 
-msg1 db "India is best",10
+msg1 db 9,"India is best",10
 
 msg1l equ $-msg1
 
@@ -12,11 +12,11 @@ mov rdx,%2
 syscall
 %endmacro
 
-%macro firstchar 1
-mov rax,1
-mov rdi,1
-mov rsi,%1
-mov rdx,1
+%macro universal 4
+mov rax,%1
+mov rdi,%2
+mov rsi,%3
+mov rdx,%4
 syscall
 %endmacro
 
@@ -27,9 +27,10 @@ section .txt
 global _start:
 _start:
 
-print msg1,msg1l
+universal 1,1,msg1,msg1l
+universal 1,1,msg1,msg1l
+universal 1,1,msg1,msg1l
 
-firstchar msg1
 
 mov rax,60
 syscall
