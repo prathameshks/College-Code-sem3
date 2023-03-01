@@ -2,7 +2,12 @@ section .data
 
 msg db 10, 9, "Welcome to ASM CODE",10
 ;msg - var name
-;db - type data bytes
+;db - type define bytes
+;dw - define word
+;dd - define double word
+;dq - define quad word
+
+
 ;10 - new line
 ;13 - carage return
 ;9 - tab
