@@ -55,7 +55,8 @@ class BookTree {
     BookTree() {
         root = new node;
         cout << "Enter Name of the book:";
-        cin >> root->data;
+        // cin.ignore();
+        getline(cin, root->data);
     }
 
     void insertChap(string chName) {
@@ -169,7 +170,9 @@ int main() {
         switch (choice) {
             case (1):
                 cout << "Enter name of the new chapter:";
-                cin >> ChName;
+                cin.ignore();
+                getline(cin, ChName);
+
                 tree.insertChap(ChName);
                 break;
             case (2):
@@ -178,7 +181,8 @@ int main() {
                     break;
                 }
                 cout << "Enter name of the new Section:";
-                cin >> secname;
+                cin.ignore();
+                getline(cin, secname);
                 tree.insertSec(secname, chindex);
                 break;
             case (3):
@@ -191,7 +195,8 @@ int main() {
                     break;
                 }
                 cout << "Enter name of the new SubSection:";
-                cin >> subsecname;
+                cin.ignore();
+                getline(cin, subsecname);
                 tree.insertSubSec(subsecname, chindex, secindex);
 
                 break;
