@@ -1,3 +1,6 @@
+/*A book consists of chapters, chapters consist of sections and sections consist
+of subsections. Construct a tree and print the nodes. Find the time and space
+requirements of your method. */
 #include <iostream>
 #include <string>
 
@@ -9,30 +12,44 @@ class node {
    public:
     string data;
     node* child[MAX_NUM_OF_CHILD];
+    int size = 0;
 
     node() {
-        for (int i = 0;i<MAX_NUM_OF_CHILD;i++) {
+        for (int i = 0; i < MAX_NUM_OF_CHILD; i++) {
             child[i] = NULL;
         }
     }
 };
 
-void printTree(node*& curnode, int tab = 0) {
-    if (curnode == NULL) {
-        return;
-    }
-
-    for (int i = 0; i < tab; i++) {
-        cout << '\t';
-    }
-    cout << curnode->data << endl;
-    for (int i = 0; i < MAX_NUM_OF_CHILD; i++) {
-        printTree(curnode->child[i], tab + 1);
-    }
-}
-
 class BookTree {
     node* root = NULL;
+
+    void printTree(node*& curnode, int tab = 0) {
+        if (curnode == NULL) return;
+
+        for (int i = 0; i < tab; i++) cout << '\t';
+        switch (tab) {
+            case 0:
+                cout << "Book:";
+                break;
+
+            case 1:
+                cout << "Chapter:";
+                break;
+
+            case 2:
+                cout << "Section:";
+                break;
+
+            case 3:
+                cout << "Subsection:";
+                break;
+        }
+        cout << curnode->data << endl;
+        for (int i = 0; i < MAX_NUM_OF_CHILD; i++) {
+            printTree(curnode->child[i], tab + 1);
+        }
+    }
 
    public:
     BookTree() {
@@ -41,181 +58,147 @@ class BookTree {
         cin >> root->data;
     }
 
-    void insert_section() {
-        string sec;
-        int i = 0;
-        cout << "Enter name of the section:";
-        cin >> sec;
-        int insert = 0;
-        for (i = 0; i < MAX_NUM_OF_CHILD; i++) {
-            if (root->child[i] == NULL) {
-                insert = 1;
-                break;
-            } else if (root->child[i]->data == sec) {
-                insert = 0;
-                break;
-            } else if (i == (MAX_NUM_OF_CHILD - 1)) {
-                insert = 2;
-            }
-        }
-        if (insert == 0) {
-            cout << "Section " << sec << " Already Exists" << endl;
-        } else if (insert == 1) {
-            root->child[i] = new node();
-            root->child[i]->data = sec;
-            cout << "Section " << sec << " Added" << endl;
+    void insertChap(string chName) {
+        if (root->size >= MAX_NUM_OF_CHILD) {
+            cout << "Chapter Limit reached can not Add chapter" << endl;
+            return;
         } else {
-            cout << "Section Limit Reached" << endl;
+            root->child[root->size] = new node;
+            root->child[root->size]->data = chName;
+            cout << "Chapter Added Sucessfully" << endl;
+            (root->size)++;
         }
     }
 
-    void insert_subsection() {
-        string subsec;
-        int sec_no = 0;
-        while (sec_no < MAX_NUM_OF_CHILD) {
-            if (root->child[sec_no] == NULL) {
-                break;
-            } else {
-                cout << "\tSection " << sec_no + 1 << ":"
-                     << root->child[sec_no]->data << endl;
-            }
-            sec_no++;
-        }
-        cout << "In which section you want to add subsection:";
-        cin >> sec_no;
-        sec_no--;
-
-        string sec = root->child[sec_no]->data;
-
-        int insert = 0, i;
-        for (i = 0; i < MAX_NUM_OF_CHILD; i++) {
-            if (root->child[i] == NULL) {
-                insert = 1;
-                break;
-            } else if (root->child[i]->data == sec) {
-                insert = 0;
-                break;
-            } else if (i == (MAX_NUM_OF_CHILD - 1)) {
-                insert = 2;
-            }
-        }
-        if (insert == 0) {
-            cout << "Section " << sec << " Already Exists" << endl;
-        } else if (insert == 1) {
-            root->child[i] = new node();
-            root->child[i]->data = sec;
-            cout << "Section " << sec << " Added" << endl;
+    void insertSec(string secName, int chIndex) {
+        node* chapter = root->child[chIndex];
+        if ((chapter->size) >= MAX_NUM_OF_CHILD) {
+            cout << "Section Limit reached for this chapter can not Add section"
+                 << endl;
+            return;
         } else {
-            cout << "Section Limit Reached" << endl;
+            chapter->child[chapter->size] = new node;
+            chapter->child[chapter->size]->data = secName;
+            cout << "Section Added Sucessfully" << endl;
+            (chapter->size)++;
         }
     }
 
-    void disaply_tree() {
-        printTree(root);
-
-        /*
-        cout << "Book:" << root->data << endl;
-        int sec_no = 0;
-        while (sec_no < MAX_NUM_OF_CHILD) {
-            if (root->child[sec_no] == NULL) {
-                break;
-            } else {
-                cout << "\tSection " << sec_no + 1 << ":"
-                     << root->child[sec_no]->data << endl;
-                int subsec_no = 0;
-                while (sec_no < MAX_NUM_OF_CHILD) {
-                    if (root->child[sec_no]->child[subsec_no] == NULL) {
-                        break;
-                    } else {
-                        cout << "\t\tSubsection " << subsec_no + 1 << ":"
-                             << root->child[sec_no]->child[subsec_no]->data
-                             << endl;
-                    }
-                    subsec_no++;
-                }
-            }
-            sec_no++;
+    void insertSubSec(string subSecName, int chIndex, int secIndex) {
+        node* chapter = root->child[chIndex];
+        if (secIndex >= (chapter->size) || secIndex < 0) {
+            cout << "Section not Found, Enter a valid Section index" << endl;
         }
-        */
+        node* section = chapter->child[secIndex];
+        if ((section->size) >= MAX_NUM_OF_CHILD) {
+            cout << "Sub Section Limit reached for this Section can not Add "
+                    "subsection"
+                 << endl;
+            return;
+        } else {
+            section->child[section->size] = new node;
+            section->child[section->size]->data = subSecName;
+            cout << "SubSection Added Sucessfully" << endl;
+            (section->size)++;
+        }
     }
+
+    int getChapIndex() {
+        int chIndex;
+        if (root->size <= 0) {
+            cout << "No chapters found" << endl;
+            return -1;
+        }
+    retryChindex:
+        cout << "Chapters" << endl;
+        for (int i = 0; i < root->size; i++) {
+            cout << i + 1 << "." << root->child[i]->data << endl;
+        }
+        cout << "Enter chapter index:";
+        cin >> chIndex;
+        chIndex--;
+        if (chIndex >= (root->size) || chIndex < 0) {
+            cout << "Chapter not Found, Enter a valid chapter index" << endl;
+            goto retryChindex;
+        }
+        return chIndex;
+    }
+
+    int getSecIndex(int chIndex) {
+        int secIndex;
+        node* chapter = root->child[chIndex];
+        if (chapter->size <= 0) {
+            cout << "No Sections found" << endl;
+            return -1;
+        }
+    retrySecindex:
+        cout << "Sections" << endl;
+        for (int i = 0; i < chapter->size; i++) {
+            cout << i + 1 << "." << chapter->child[i]->data << endl;
+        }
+        cout << "Enter Section index:";
+        cin >> secIndex;
+        secIndex--;
+
+        if (secIndex >= (chapter->size) || secIndex < 0) {
+            cout << "Section not Found, Enter a valid Section index" << endl;
+            goto retrySecindex;
+        }
+
+        return secIndex;
+    }
+
+    void disaply_tree() { printTree(root); }
 };
 
 int main() {
-    node* head = new node;
-    head->data = "Book 1";
-    head->child[0] = new node;
-    head->child[1] = new node;
-    head->child[2] = new node;
-    head->child[3] = new node;
-
-    head->child[0]->child[0] = new node;
-    head->child[0]->child[1] = new node;
-    head->child[0]->child[2] = new node;
-    head->child[0]->child[3] = new node;
-
-    head->child[0]->child[0]->child[0] = new node;
-    head->child[0]->child[0]->child[1] = new node;
-    head->child[0]->child[0]->child[2] = new node;
-    head->child[0]->child[0]->child[3] = new node;
-
-    head->child[0]->child[3]->child[0] = new node;
-    head->child[0]->child[3]->child[1] = new node;
-    head->child[0]->child[3]->child[2] = new node;
-    head->child[0]->child[3]->child[3] = new node;
-
-    head->child[2]->child[0] = new node;
-    head->child[2]->child[1] = new node;
-    head->child[2]->child[2] = new node;
-    head->child[2]->child[3] = new node;
-
-    head->child[0]->data = "Chapter 1";
-    head->child[1]->data = "Chapter 2";
-    head->child[2]->data = "Chapter 3";
-    head->child[3]->data = "Chapter 4";
-
-    head->child[0]->child[0]->data = "Section 1";
-    head->child[2]->child[0]->data = "Section 1";
-    head->child[0]->child[1]->data = "Section 2";
-    head->child[2]->child[1]->data = "Section 2";
-    head->child[0]->child[2]->data = "Section 3";
-    head->child[2]->child[2]->data = "Section 3";
-    head->child[0]->child[3]->data = "Section 4";
-    head->child[2]->child[3]->data = "Section 4";
-
-    head->child[0]->child[0]->child[0]->data = "subsec 1";
-    head->child[0]->child[0]->child[1]->data = "subsec 2";
-    head->child[0]->child[0]->child[2]->data = "subsec 3";
-    head->child[0]->child[0]->child[3]->data = "subsec 4";
-
-    head->child[0]->child[3]->child[0]->data = "subsec 1";
-    head->child[0]->child[3]->child[1]->data = "subsec 2";
-    head->child[0]->child[3]->child[2]->data = "subsec 3";
-    head->child[0]->child[3]->child[3]->data = "subsec 4";
-
-    printTree(head);
-
-    exit(1);
     BookTree tree;
     int choice;
+    string ChName, secname, subsecname;
+    int chindex, secindex;
     do {
         cout << "--: MENU :--" << endl;
-        cout << "1. Insert Section" << endl;
-        cout << "2. Insert Subsection" << endl;
-        cout << "3. Display Tree" << endl;
-        cout << "4. Quit" << endl;
+        cout << "1. Insert Chapter" << endl;
+        cout << "2. Insert Section" << endl;
+        cout << "3. Insert Subsection" << endl;
+        cout << "4. Display Tree" << endl;
+        cout << "5. Quit" << endl;
         cout << "Enter choice:";
         cin >> choice;
 
         switch (choice) {
             case (1):
-                tree.insert_section();
+                cout << "Enter name of the new chapter:";
+                cin >> ChName;
+                tree.insertChap(ChName);
                 break;
             case (2):
+                chindex = tree.getChapIndex();
+                if (chindex == -1) {
+                    break;
+                }
+                cout << "Enter name of the new Section:";
+                cin >> secname;
+                tree.insertSec(secname, chindex);
                 break;
             case (3):
-                tree.disaply_tree();
+                chindex = tree.getChapIndex();
+                if (chindex == -1) {
+                    break;
+                }
+                secindex = tree.getSecIndex(chindex);
+                if (secindex == -1) {
+                    break;
+                }
+                cout << "Enter name of the new SubSection:";
+                cin >> subsecname;
+                tree.insertSubSec(subsecname, chindex, secindex);
+
                 break;
             case (4):
+                tree.disaply_tree();
+                break;
+            case (5):
                 cout << "Thank you" << endl;
                 break;
             default:
@@ -223,7 +206,7 @@ int main() {
                 break;
         }
 
-    } while (choice != 4);
+    } while (choice != 5);
 
     return 0;
 }
