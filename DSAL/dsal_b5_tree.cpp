@@ -64,6 +64,12 @@ class BookTree {
             cout << "Chapter Limit reached can not Add chapter" << endl;
             return;
         } else {
+            for (int i = 0; i < root->size; i++) {
+                if (chName == root->child[i]->data) {
+                    cout << "Chapter Already Exists." << endl;
+                    return;
+                }
+            }
             root->child[root->size] = new node;
             root->child[root->size]->data = chName;
             cout << "Chapter Added Sucessfully" << endl;
@@ -78,6 +84,12 @@ class BookTree {
                  << endl;
             return;
         } else {
+            for (int i = 0; i < chapter->size; i++) {
+                if (secName == chapter->child[i]->data) {
+                    cout << "Section Already Exists." << endl;
+                    return;
+                }
+            }
             chapter->child[chapter->size] = new node;
             chapter->child[chapter->size]->data = secName;
             cout << "Section Added Sucessfully" << endl;
@@ -97,6 +109,12 @@ class BookTree {
                  << endl;
             return;
         } else {
+            for (int i = 0; i < section->size; i++) {
+                if (subSecName == section->child[i]->data) {
+                    cout << "SubSection Already Exists." << endl;
+                    return;
+                }
+            }
             section->child[section->size] = new node;
             section->child[section->size]->data = subSecName;
             cout << "SubSection Added Sucessfully" << endl;
