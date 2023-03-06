@@ -12,9 +12,10 @@ class node {
    public:
     string data;
     node* child[MAX_NUM_OF_CHILD];
-    int size = 0;
+    int size;
 
     node() {
+    	size = 0;
         for (int i = 0; i < MAX_NUM_OF_CHILD; i++) {
             child[i] = NULL;
         }
