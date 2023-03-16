@@ -20,12 +20,13 @@ class HashTable:
         for rec in recs:
             self.insert_rec(rec)
 
-    def insert_rec(self, record: list) -> None:
-        key = self.hash_function(record[0])
+    def insert_rec(self, rec: list) -> None:
+        key = self.hash_function(rec[0])
         if (self.record[key][0] == 0):
             # no collision
-            self.record[key][0] = record[0]
-            self.record[key][1] = record[1]
+            self.record[key][0] = rec[0]
+            self.record[key][1] = rec[1]
+            self.record[key][2] = -1
         else:  # collision
             if (self.hash_function(self.record[key][0]) == key):
                 # create link
@@ -36,27 +37,31 @@ class HashTable:
                 while (self.record[k][0] != 0):
                     k = ((k+1) % self.m)
                 self.record[last_elmt][2] = k
-                self.record[k][0] = record[0]
-                self.record[k][1] = record[1]
+                self.record[k][0] = rec[0]
+                self.record[k][1] = rec[1]
                 self.record[k][2] = -1
             else:  # replacement
                 # find last link
-                old_elmt_key = self.hash_function(self.record[key][0])
-                # prev_link_key
-                prev_link_key = old_elmt_key
-                while (self.record[old_elmt_key] != self.record[key]):
-                    prev_link_key = old_elmt_key
-                    old_elmt_key = self.record[old_elmt_key][2]
+                for i in range(self.m):
+                    if(self.record[i][2] == key):
+                        prev_link_key = i
+                
+                old_rec_tel = self.record[key][0]
+                old_rec_name = self.record[key][1]
+                old_rec_link = self.record[key][2]
+
+                self.record[key][0] = rec[0]
+                self.record[key][1] = rec[1]
+                self.record[key][2] = -1
 
                 k = key
                 while (self.record[k][0] != 0):
                     k = ((k+1) % self.m)
-                self.record[prev_link_key][2] = k
-                self.record[k] = self.record[key]
 
-                self.record[key][0] = record[0]
-                self.record[key][1] = record[1]
-                self.record[key][2] = -1
+                self.record[prev_link_key][2] = k
+                self.record[k][0] = old_rec_tel
+                self.record[k][1] = old_rec_name
+                self.record[k][2] = old_rec_link
 
 
 def input_records(n: int) -> list[list]:
@@ -75,11 +80,11 @@ def main() -> None:
     t1.generate_table(records)
     t1.display_table()
 
-    
 
 
-# if __name__ == "__main__":
-#     main()
+
+if __name__ == "__main__":
+    main()
 
 """
 5
