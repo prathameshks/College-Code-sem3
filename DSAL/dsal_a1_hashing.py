@@ -5,7 +5,7 @@ class HashTable1:
         self.record = []
         self.m = size
 
-        # initialize all records with 0 
+        # initialize all records with 0
         for _ in range(size):
             self.record.append([0, ""])  # [tel,name]
 
@@ -34,6 +34,7 @@ class HashTable1:
 
             self.record[key][0] = rec[0]
             self.record[key][1] = rec[1]
+
 
 class HashTable2:
     """linear Probing With Replacement"""
@@ -101,7 +102,6 @@ class HashTable2:
                 self.record[k][0] = old_rec_tel
                 self.record[k][1] = old_rec_name
                 self.record[k][2] = old_rec_link
-
 
 
 class HashTable3:
