@@ -22,7 +22,7 @@ msglen1 equ $-msg
 section .bss
 
 
-section .txt
+section .text
 
 global _start:
 _start:
@@ -45,4 +45,4 @@ syscall
 ;(base) admin1@410-15:~$ ld -o x sample.o
 ;(base) admin1@410-15:~$ ./x
 
-;nasm -f elf64 sample.asm -o a.o; d -o x a.o; ./x
+;nasm -f elf64 sample.asm -o a.o; ld -o x a.o; ./x

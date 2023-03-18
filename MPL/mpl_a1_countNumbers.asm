@@ -13,14 +13,14 @@ msg db "Counting +ve and -ve elements of array.",10
 msgl equ $-msg
 
 msg1 db "Positive numbers are :"
-msg1l equ $-msg1
+msglen1 equ $-msg1
 
 msg2 db "Negetive numbers are :"
-msg2l equ $-msg2
+msglen2 equ $-msg2
 
 ;creating array of hexadecimal numbers 
 
-array db 12h,1h,90h,1ah,5h,32h,76h
+array dq 12h,1h,90h,1ah,5h,32h,76h
 ;h - hexadecimal
 ;d - decimal
 ;o - octal
@@ -48,14 +48,44 @@ mov rcx,07
 
 again:
 ;name of my loop
-
-	bt byte[rsi],7 ;bit test
+	bt qword[rsi],07 ;bit test
 	jnc pnxt ;jump not carry
+	inc byte[ncnt]
+	jmp pskip
+	pnxt: inc byte[pcnt]
+	pskip: inc rsi
+loop again
 
-
-
+print msg1,msglen1
+mov bl,[pcnt]
+call disp_result
+print newline,1
+print msg2,msglen2
+mov bl,[ncnt]
+call disp_result
+print newline,1
 
 mov rax,60
+mov rdi,0
 syscall
+
+
+disp_result:
+	mov rdi,dispbuff
+	mov rcx,02
+	dispup:
+		rol bl,4
+		mov dl,bl
+		and dl,0fh
+		add dl,30h
+		cmp dl,39h
+		jbe dispskip
+		add dl,07h
+	dispskip:
+		mov [rdi],dl
+		inc rdi
+		loop dispup
+		print dispbuff,2
+	ret
 
 ; nasm -f elf64 mpl_a1_countNumbers.asm ;ld -o a mpl_a1_countNumbers.o;./a
