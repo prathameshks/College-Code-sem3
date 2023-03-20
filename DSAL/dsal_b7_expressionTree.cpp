@@ -4,9 +4,17 @@ and traverse it using post order traversal (non recursive) and then delete the
 entire tree.
 */
 
+/*
+
+=================
+|| NOT WORKING ||
+=================
+
+*/
+
 #include <iostream>
 #include <map>
-#include<unordered_map>
+#include <unordered_map>
 using namespace std;
 
 class node {
@@ -36,6 +44,7 @@ class stack {
 
    public:
     stack() { top = NULL; }
+    bool isempty() { return (top == NULL); }
     void push(node* val) {
         if (top == NULL) {
             top = new stackNode();
@@ -99,23 +108,27 @@ class ExpressionTree {
 
     void postfix_exp() {
         node* temp = root;
-        unordered_map<node*, node*> parent;
-        parent.insert(pair<node*,node*> (root,nullptr));
 
-        while (temp) {
-            cout<<temp->data<<"*";
-            if (temp->left && (parent.find(temp->left) == parent.end())){
-                parent[temp->left] = temp;
-                temp = temp->left;
-            }else if (temp->right && (parent.find(temp->right) == parent.end())){
-                parent[temp->right] = temp;
-                temp = temp->right;
-            }else {
-                cout << temp->data;
-                temp = (parent.find(temp))->second;
+        stack stack1, stack2;
+
+        stack1.push(root);
+
+        while (!stack1.isempty()) {
+            temp = stack1.pop();
+            stack2.push(temp);
+            if (temp->left != NULL) {
+                stack1.push(temp->left);
+            }
+            if (temp->right != NULL) {
+                stack1.push(temp->right);
             }
         }
-        cout<<endl;
+        while (!stack2.isempty()) {
+            temp = stack2.pop();
+            cout << temp->data;
+        }
+
+        cout << endl;
     }
 
     void display_postfix() {
@@ -141,8 +154,7 @@ int main() {
 
     tree.input_prefix(st);
     tree.display_postfix();
-    tree.postfix_exp();
-
+    // tree.postfix_exp();
 
     return 0;
 }

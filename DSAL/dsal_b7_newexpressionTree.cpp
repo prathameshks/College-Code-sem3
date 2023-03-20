@@ -101,27 +101,29 @@ public:
 
     void display_postfix_NR()
     {
-        map<node *, node *> parent;
-        parent[root] = NULL;
-        node *temp = root;
-        while (temp != NULL)
-        {
-            if (temp->left && (parent.find(temp) == parent.end()))
-            {
-                parent[temp->left]= temp;
-                temp = temp->left;
+        node* temp = root;
+
+        stack<node*> stack1, stack2;
+
+        stack1.push(root);
+
+        while (!stack1.empty()) {
+            temp = stack1.top();
+            stack1.pop();
+            stack2.push(temp);
+            if (temp->left != NULL) {
+                stack1.push(temp->left);
             }
-            else if (temp->right && (parent.find(temp) == parent.end()))
-            {
-                parent[temp->right]= temp;
-                temp = temp->right;
-            }
-            else
-            {
-                cout << temp->data;
-                temp = parent[temp];
+            if (temp->right != NULL) {
+                stack1.push(temp->right);
             }
         }
+        while (!stack2.empty()) {
+            temp = stack2.top();
+            stack2.pop();
+            cout << temp->data;
+        }
+
         cout<<endl;
     }
 };
