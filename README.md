@@ -4,7 +4,7 @@
 This repository contains code for the Data Structures Lab (DSL), Object-Oriented Programming Lab (OOPL), and Computer Graphics Lab (CGL) for semester 3 of the SPPU Pune University Computer Engineering course. Explore and learn from the code examples and exercises!
 
 ## Installation 💻
-To run the code in this repository, you will need to have Python, C++, OpenGL, and the graphics.h library installed on your computer.
+To run the code in this repository, you will need to have Python, C++, OpenGL, and the graphics.h library installed on your computer. The graphics.h library can be installed using libgraph.
 
 ## Usage 🚀
 To use the code in this repository, navigate to the appropriate directory for the lab you want to work on and follow the instructions in the README file for that lab.
@@ -18,6 +18,3 @@ Contributions to this repository are welcome. If you have any suggestions or imp
 
 ## License 📄
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
-
-
-Thanks🤩
